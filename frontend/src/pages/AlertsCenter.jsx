@@ -25,6 +25,16 @@ export default function AlertsCenter() {
   const [windowFilter, setWindowFilter] = useState('24h');
   const [bannerDismissed, setBannerDismissed] = useState(false);
   const [selectedAlert, setSelectedAlert] = useState(null);
+
+  useEffect(() => {
+    const handleAlertsKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (selectedAlert) setSelectedAlert(null);
+      }
+    };
+    window.addEventListener('keydown', handleAlertsKeyDown);
+    return () => window.removeEventListener('keydown', handleAlertsKeyDown);
+  }, [selectedAlert]);
   const [dispatchNotice, setDispatchNotice] = useState(null);
   const [currentTime, setCurrentTime] = useState({
     utc: new Date().toUTCString().slice(17, 25),
@@ -482,10 +492,18 @@ export default function AlertsCenter() {
               )}
             </div>
 
-            {/* Alert Inspection Modal Drawer */}
+                        {/* Alert Inspection Modal Drawer */}
             {selectedAlert && (
-              <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
-                <div className="bg-[#141c18] border border-white/20 rounded-2xl max-w-xl w-full max-h-[90vh] flex flex-col p-4 sm:p-6 shadow-2xl animate-scale-up overflow-hidden">
+              <div 
+                onClick={() => setSelectedAlert(null)}
+                className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 cursor-pointer"
+                role="dialog"
+                aria-modal="true"
+              >
+                <div 
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#141c18] border border-white/20 rounded-2xl max-w-xl w-full max-h-[90vh] flex flex-col p-4 sm:p-6 shadow-2xl animate-scale-up overflow-hidden cursor-default"
+                >
                   <div className="flex items-start justify-between pb-4 border-b border-white/10">
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
@@ -495,14 +513,17 @@ export default function AlertsCenter() {
                         </h3>
                       </div>
                       <span className="font-mono text-xs text-gray-400 mt-1 uppercase">
-                        {getTierName(selectedAlert.tier)} · ID: #{selectedAlert.id}
+                        {getTierName(selectedAlert.tier)} • ID: #{selectedAlert.id}
                       </span>
                     </div>
                     <button 
+                      type="button"
                       onClick={() => setSelectedAlert(null)}
-                      className="text-gray-400 hover:text-white p-1 rounded hover:bg-white/10"
+                      className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 hover:bg-red-600 text-gray-300 hover:text-white border border-white/10 hover:border-red-400 transition-all cursor-pointer group"
+                      title="Close (Esc)"
+                      aria-label="Close modal"
                     >
-                      <X className="text-gray-400 hover:text-white" size={20} />
+                      <X size={18} strokeWidth={2.5} className="group-hover:rotate-90 transition-transform duration-200" />
                     </button>
                   </div>
 

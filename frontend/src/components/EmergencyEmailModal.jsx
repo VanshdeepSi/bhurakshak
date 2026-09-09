@@ -1,20 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, AlertTriangle, X, Printer, Shield, CheckCircle2, Settings, ExternalLink } from 'lucide-react';
 
 export default function EmergencyEmailModal({ emailData, onClose }) {
   if (!emailData) return null;
 
+  // Keyboard Escape listener to cross/dismiss modal
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (onClose) onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const isRealDelivery = emailData.real_sent || emailData.status === 'DELIVERED';
   const isUnconfigured = emailData.status === 'UNCONFIGURED';
   const isFailed = emailData.status === 'FAILED' || emailData.status === 'AUTH_ERROR' || emailData.status === 'TRANSMISSION_ERROR';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="bg-[#121815] border border-red-500/50 rounded-2xl w-[95vw] max-w-3xl max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(239,68,68,0.35)] overflow-hidden">
+    <div 
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in cursor-pointer"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="bg-[#121815] border border-red-500/50 rounded-2xl w-[95vw] max-w-3xl max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(239,68,68,0.35)] overflow-hidden cursor-default"
+      >
         
         {/* Email Client Top Bar */}
-        <div className="bg-[#0a0f0d] px-6 py-4 border-b border-white/[0.08] flex items-center justify-between shrink-0">
+        <div className="bg-[#0a0f0d] px-5 sm:px-6 py-4 border-b border-white/[0.08] flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400">
               <Mail size={18} />
@@ -34,18 +53,22 @@ export default function EmergencyEmailModal({ emailData, onClose }) {
 
           <div className="flex items-center gap-2">
             <button 
+              type="button"
               onClick={() => window.print()}
-              className="p-2 text-gray-400 hover:text-white hover:bg-white/[0.06] rounded-lg transition-colors"
+              className="p-2 text-gray-400 hover:text-white hover:bg-white/[0.06] rounded-lg transition-colors cursor-pointer"
               title="Print Emergency Notice"
             >
               <Printer size={18} />
             </button>
+            {/* Prominent Cross Button */}
             <button 
+              type="button"
               onClick={onClose}
-              className="p-2 text-gray-400 hover:text-white hover:bg-white/[0.06] rounded-lg transition-colors"
-              title="Close"
+              className="flex items-center justify-center w-9 h-9 rounded-xl bg-white/10 hover:bg-red-600 text-gray-300 hover:text-white border border-white/10 hover:border-red-400 transition-all cursor-pointer active:scale-95 group"
+              title="Close Notice (Esc)"
+              aria-label="Close Notice"
             >
-              <X size={20} />
+              <X size={20} strokeWidth={2.5} className="group-hover:rotate-90 transition-transform duration-200" />
             </button>
           </div>
         </div>
@@ -68,7 +91,7 @@ export default function EmergencyEmailModal({ emailData, onClose }) {
             <Link 
               to="/settings" 
               onClick={onClose}
-              className="text-xs text-white bg-amber-600/60 hover:bg-amber-500/80 px-2.5 py-0.5 rounded font-bold transition-colors flex items-center gap-1 shrink-0"
+              className="text-xs text-white bg-amber-600/60 hover:bg-amber-500/80 px-2.5 py-0.5 rounded font-bold transition-colors flex items-center gap-1 shrink-0 no-underline"
             >
               <Settings size={12} /> Configure SMTP
             </Link>
@@ -82,7 +105,7 @@ export default function EmergencyEmailModal({ emailData, onClose }) {
             <Link 
               to="/settings" 
               onClick={onClose}
-              className="text-xs text-white bg-red-600/60 hover:bg-red-500/80 px-2.5 py-0.5 rounded font-bold transition-colors flex items-center gap-1 shrink-0"
+              className="text-xs text-white bg-red-600/60 hover:bg-red-500/80 px-2.5 py-0.5 rounded font-bold transition-colors flex items-center gap-1 shrink-0 no-underline"
             >
               <Settings size={12} /> Fix SMTP
             </Link>
@@ -94,7 +117,7 @@ export default function EmergencyEmailModal({ emailData, onClose }) {
           <div>
             <span className="text-gray-400">To: </span>
             <strong className="text-white">{emailData.recipient}</strong>
-            <span className="text-gray-500 mx-2">·</span>
+            <span className="text-gray-500 mx-2">•</span>
             <span className="text-gray-400">Sector: </span>
             <strong className="text-emerald-400">{emailData.district}</strong>
           </div>
@@ -125,17 +148,19 @@ export default function EmergencyEmailModal({ emailData, onClose }) {
               <Link
                 to="/settings"
                 onClick={onClose}
-                className="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high border border-white/[0.1] text-gray-300 hover:text-white font-medium text-xs rounded-lg transition-all flex items-center gap-1.5"
+                className="px-3 py-2 bg-surface-container hover:bg-surface-container-high border border-white/[0.1] text-gray-300 hover:text-white font-medium text-xs rounded-lg transition-all flex items-center gap-1.5 no-underline"
               >
                 <Settings size={13} />
                 <span>SMTP Settings</span>
               </Link>
             )}
             <button 
+              type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-medium text-xs rounded-lg transition-all shadow-md active:scale-95"
+              className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-semibold text-xs rounded-lg transition-all shadow-md active:scale-95 flex items-center gap-1.5 cursor-pointer"
             >
-              Acknowledge &amp; Close
+              <X size={14} strokeWidth={2.5} />
+              <span>Dismiss &amp; Close</span>
             </button>
           </div>
         </div>

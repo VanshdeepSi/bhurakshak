@@ -58,10 +58,43 @@ export function AlertProvider({ children }) {
     // 1. Play emergency audio alert siren
     emergencyAudio.playSiren(2.5);
 
-    // 2. Audible and toast notification
-    toast.error(`🚨 CRITICAL DANGER ALERT: ${districtName} is in Tier 4 Red Alert! Evacuate immediately!`, {
+    // 2. Custom dismissible alert banner toast with explicit ✕ cross button
+    toast((t) => (
+      <div className="flex items-center justify-between gap-3 w-full py-0.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-lg shrink-0">🚨</span>
+          <div className="text-left">
+            <span className="block text-xs font-bold text-white uppercase tracking-wider font-mono">
+              CRITICAL DANGER ALERT: {districtName}
+            </span>
+            <span className="block text-[11px] text-red-200">
+              Tier 4 Red Alert! Hydro-geotechnical threshold exceeded.
+            </span>
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            toast.dismiss(t.id);
+            emergencyAudio.stop();
+          }}
+          className="flex items-center justify-center w-6 h-6 rounded-lg bg-white/20 hover:bg-white/30 text-white font-bold text-xs transition-colors cursor-pointer shrink-0"
+          title="Dismiss notification"
+          aria-label="Dismiss notification"
+        >
+          ✕
+        </button>
+      </div>
+    ), {
+      id: 'emergency-danger-toast',
       duration: 8000,
-      icon: '🚨'
+      style: {
+        background: '#7f1d1d',
+        color: '#fff',
+        border: '1px solid #ef4444',
+        boxShadow: '0 0 25px rgba(239, 68, 68, 0.6)',
+        padding: '10px 14px',
+        maxWidth: '480px'
+      }
     });
 
     // 3. Automated email dispatch via backend SMTP if recipient known
@@ -79,7 +112,7 @@ export function AlertProvider({ children }) {
         setDispatchedEmailRecord(res.data.dispatched_email);
 
         if (delivery?.real_sent) {
-          toast.success(`✅ Real emergency email transmitted to ${targetEmail} via SMTP!`, { duration: 6000 });
+          toast.success(`Real emergency email transmitted to ${targetEmail} via SMTP!`, { duration: 6000 });
         }
       } catch (err) {
         console.error('Failed auto email dispatch on alert trigger:', err);

@@ -1,5 +1,5 @@
 import { API_BASE } from '../config/api';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   AlertTriangle, Volume2, VolumeX, X, ShieldAlert, Mail, 
@@ -28,6 +28,25 @@ export default function DirectDangerAlertModal({
   const probability = alertData.probability ? Math.round(alertData.probability * 100) : 94;
   const rainfall = alertData.rainfall_72h || 242.6;
   const fos = alertData.factor_of_safety || 0.84;
+
+  const handleDismiss = () => {
+    emergencyAudio.stop();
+    if (onClose) onClose();
+  };
+
+  // Keyboard Escape listener to cross and dismiss alert popup
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleDismiss();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      emergencyAudio.stop();
+    };
+  }, []);
 
   const handleToggleSound = () => {
     if (isMuted) {
@@ -62,7 +81,7 @@ export default function DirectDangerAlertModal({
       }
 
       if (delivery?.real_sent) {
-        toast.success(`✅ Real emergency email dispatched to ${emailToUse} via SMTP!`, { duration: 6000 });
+        toast.success(`Real emergency email dispatched to ${emailToUse} via SMTP!`, { duration: 6000 });
       } else if (delivery?.status === 'UNCONFIGURED') {
         toast('Notice generated & logged. Configure Gmail App Password in Settings for real inbox delivery.', {
           icon: '⚠️',
@@ -83,8 +102,17 @@ export default function DirectDangerAlertModal({
   const isUnconfigured = localDelivery?.status === 'UNCONFIGURED';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-      <div className="bg-[#101713] border-2 border-red-500 rounded-2xl w-[95vw] max-w-2xl max-h-[92vh] flex flex-col shadow-[0_0_60px_rgba(239,68,68,0.45)] overflow-hidden">
+    <div 
+      onClick={handleDismiss}
+      className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in cursor-pointer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="danger-alert-heading"
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        className="bg-[#101713] border-2 border-red-500 rounded-2xl w-[95vw] max-w-2xl max-h-[92vh] flex flex-col shadow-[0_0_60px_rgba(239,68,68,0.45)] overflow-hidden cursor-default"
+      >
         
         {/* Urgent Pulsing Alert Header */}
         <div className="bg-gradient-to-r from-red-950 via-red-900 to-red-950 px-5 sm:px-6 py-4 border-b border-red-500/40 flex items-center justify-between shrink-0">
@@ -94,7 +122,7 @@ export default function DirectDangerAlertModal({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-extrabold text-white text-base tracking-wider uppercase">
+                <span id="danger-alert-heading" className="font-extrabold text-white text-base tracking-wider uppercase">
                   CRITICAL DANGER ZONE ALERT
                 </span>
                 <span className="bg-white text-red-700 font-extrabold text-[10px] font-mono uppercase px-2 py-0.5 rounded shadow">
@@ -110,8 +138,9 @@ export default function DirectDangerAlertModal({
           <div className="flex items-center gap-2">
             {/* Audio Toggle */}
             <button 
+              type="button"
               onClick={handleToggleSound}
-              className={`p-2 rounded-lg border transition-all ${
+              className={`p-2 rounded-xl border transition-all cursor-pointer ${
                 isMuted 
                   ? 'bg-black/40 border-white/20 text-gray-400 hover:text-white' 
                   : 'bg-red-600/60 border-red-400 text-white shadow-[0_0_12px_rgba(239,68,68,0.6)] animate-pulse'
@@ -121,13 +150,15 @@ export default function DirectDangerAlertModal({
               {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
             </button>
 
-            {/* Close Button */}
+            {/* Prominent Cross Button to Dismiss Alert */}
             <button 
-              onClick={onClose}
-              className="p-2 text-red-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-              title="Acknowledge and Dismiss"
+              type="button"
+              onClick={handleDismiss}
+              className="flex items-center justify-center w-10 h-10 rounded-xl bg-red-800 hover:bg-red-700 active:scale-95 text-white border-2 border-red-400 hover:border-white shadow-[0_0_15px_rgba(239,68,68,0.7)] transition-all cursor-pointer shrink-0 group"
+              title="Dismiss Alert & Siren (Esc)"
+              aria-label="Dismiss Alert and Stop Siren"
             >
-              <X size={20} />
+              <X size={22} strokeWidth={2.5} className="group-hover:rotate-90 transition-transform duration-200" />
             </button>
           </div>
         </div>
@@ -144,28 +175,29 @@ export default function DirectDangerAlertModal({
             <span className="flex items-center gap-1.5 font-semibold">
               {isRealDelivered ? (
                 <>
-                  <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
-                  Emergency Advisory Transmitted to Inbox via SMTP Relay
+                  <CheckCircle2 size={14} className="text-emerald-400" />
+                  <span>Real Emergency Email Transmitted to Recipient Inbox via SMTP</span>
                 </>
               ) : isUnconfigured ? (
                 <>
-                  <AlertTriangle size={14} className="text-amber-400 shrink-0" />
-                  Advisory Logged · Configure Gmail SMTP in Settings to receive in real inbox
+                  <AlertTriangle size={14} className="text-amber-400" />
+                  <span>Email Notice Generated &amp; Logged. (Configure Gmail App Password in Settings)</span>
                 </>
               ) : (
                 <>
-                  <AlertTriangle size={14} className="text-red-400 shrink-0" />
-                  SMTP Transmission Issue: Check credentials in Settings
+                  <AlertTriangle size={14} className="text-red-400" />
+                  <span>SMTP Delivery Failure: {localDelivery.message || 'Check credentials'}</span>
                 </>
               )}
             </span>
+
             {isUnconfigured && (
               <Link 
                 to="/settings" 
-                onClick={onClose}
-                className="text-[11px] text-white bg-amber-600 hover:bg-amber-500 px-2 py-0.5 rounded font-bold transition-colors flex items-center gap-1 shrink-0 ml-2"
+                onClick={handleDismiss}
+                className="text-xs text-white bg-amber-600 hover:bg-amber-500 px-2.5 py-0.5 rounded font-bold transition-colors flex items-center gap-1 shrink-0 no-underline"
               >
-                <Settings size={11} /> Settings
+                <Settings size={12} /> Configure SMTP
               </Link>
             )}
           </div>
@@ -214,7 +246,7 @@ export default function DirectDangerAlertModal({
                   1
                 </span>
                 <p>
-                  <strong className="text-white">Evacuate Slopes & Runout Zones: </strong>
+                  <strong className="text-white">Evacuate Slopes &amp; Runout Zones: </strong>
                   Move perpendicular to drainage ravines, tea garden terraces, and steep embankments immediately.
                 </p>
               </div>
@@ -258,6 +290,7 @@ export default function DirectDangerAlertModal({
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => handleManualDispatch()}
                   disabled={dispatching}
                   className="px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all shadow shrink-0 disabled:opacity-50 cursor-pointer"
@@ -297,7 +330,7 @@ export default function DirectDangerAlertModal({
         <div className="bg-[#0b100d] px-4 sm:px-6 py-3 sm:py-3.5 border-t border-white/[0.08] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0">
           <Link 
             to={`/district/${encodeURIComponent(district)}`}
-            onClick={onClose}
+            onClick={handleDismiss}
             className="text-xs text-emerald-400 hover:text-emerald-300 font-mono flex items-center justify-center sm:justify-start gap-1 no-underline"
           >
             <span>View Full District Telemetry Report</span>
@@ -307,18 +340,21 @@ export default function DirectDangerAlertModal({
           <div className="flex items-center justify-end gap-2">
             <Link
               to="/settings"
-              onClick={onClose}
-              className="px-3 py-1.5 bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.1] text-gray-300 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-colors no-underline"
+              onClick={handleDismiss}
+              className="px-3 py-2 bg-white/[0.06] hover:bg-white/[0.12] border border-white/[0.1] text-gray-300 rounded-lg text-xs font-mono flex items-center gap-1.5 transition-colors no-underline"
             >
               <Settings size={13} className="text-emerald-400" />
               <span>SMTP Settings</span>
             </Link>
 
             <button
-              onClick={onClose}
-              className="px-4 py-1.5 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-bold transition-all shadow cursor-pointer"
+              type="button"
+              onClick={handleDismiss}
+              className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg text-xs font-bold transition-all shadow-[0_0_15px_rgba(239,68,68,0.4)] flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+              title="Dismiss Alert & Siren (Esc)"
             >
-              Acknowledge & Close
+              <X size={14} strokeWidth={2.5} />
+              <span>Dismiss Alert &amp; Siren</span>
             </button>
           </div>
         </div>

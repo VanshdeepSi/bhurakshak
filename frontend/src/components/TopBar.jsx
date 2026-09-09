@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { 
   User, LogOut, Mail, Bell, Shield, AlertTriangle, MapPin, 
-  ChevronDown, CheckCircle, Settings, Compass, Sun, Moon, Flame, Clock
+  ChevronDown, CheckCircle, Settings, Compass, Sun, Moon, Flame, Clock, X
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -26,6 +26,7 @@ export default function TopBar() {
   const [user, setUser] = useState(null);
   const [dispatchedEmail, setDispatchedEmail] = useState(null);
   const [districtAlert, setDistrictAlert] = useState(null);
+  const [topBannerDismissed, setTopBannerDismissed] = useState(false);
   const [locating, setLocating] = useState(false);
 
   const isDistrictPage = location.pathname.startsWith('/district/');
@@ -50,7 +51,7 @@ export default function TopBar() {
         const parsed = JSON.parse(storedUser);
         const nameLower = (parsed?.name || '').toLowerCase();
         const emailLower = (parsed?.email || '').toLowerCase();
-        if (nameLower.includes('bleeding') || emailLower.includes('bleeding') || nameLower.includes('vansh')) {
+        if (nameLower.includes('bleeding_edge') || emailLower.includes('bleeding_edge')) {
           localStorage.removeItem('bhurakshak_user');
           setUser(null);
           return;
@@ -197,7 +198,7 @@ export default function TopBar() {
         </div>
 
         {/* Center: Red Alert Evacuation Banner if User is in Red Zone */}
-        {user && isRedAlert && (
+        {user && isRedAlert && !topBannerDismissed && (
           <div className="hidden md:flex items-center gap-3 bg-red-950/60 border border-red-500/50 px-4 py-2 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.25)] animate-pulse">
             <AlertTriangle size={18} className="text-red-400 shrink-0" />
             <div className="text-xs text-red-200">
@@ -212,6 +213,15 @@ export default function TopBar() {
                 View Notice
               </button>
             )}
+            <button
+              type="button"
+              onClick={() => setTopBannerDismissed(true)}
+              className="ml-1 p-1 text-red-300 hover:text-white rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+              title="Dismiss banner"
+              aria-label="Dismiss banner"
+            >
+              <X size={15} strokeWidth={2.5} />
+            </button>
           </div>
         )}
 
