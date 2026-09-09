@@ -1,6 +1,7 @@
 // Centralized Environment-Aware API Configuration
-// In local development: defaults to http://localhost:8000/api
-// In production on Vercel: reads VITE_API_URL or relative /api
+// Automatically connects to live Render backend in production and localhost:8000 in dev
+
+const RENDER_BACKEND_URL = 'https://bhurakshak-vjq5.onrender.com';
 
 const getApiBase = () => {
   if (import.meta.env.VITE_API_URL) {
@@ -13,7 +14,8 @@ const getApiBase = () => {
       return 'http://localhost:8000/api';
     }
   }
-  return '/api';
+  // Production fallback directly to live Render backend
+  return `${RENDER_BACKEND_URL}/api`;
 };
 
 export const API_BASE = getApiBase();
