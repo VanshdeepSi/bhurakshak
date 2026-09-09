@@ -38,7 +38,7 @@ export default function CitizenPublicView() {
 </div>
 </div>
 {/*  Large Answer State: Critical Alert Tier Banner  */}
-<div className="flex flex-col bg-error-container text-on-error-container rounded-xl p-space-md shadow-xl gap-space-sm relative overflow-hidden">
+<div className="flex flex-col bg-error-container text-on-error-container rounded-xl p-4 sm:p-space-md shadow-xl gap-space-sm relative overflow-hidden">
 <div className="flex items-center justify-between">
 <div className="inline-flex items-center gap-2 bg-error text-on-error px-2.5 py-1 rounded">
 <span className="material-symbols-outlined text-[18px]">emergency_home</span>
@@ -66,7 +66,7 @@ export default function CitizenPublicView() {
 </button>
 </div>
 {/*  Route Map View Contextual Drawer  */}
-<div className="hidden flex-col bg-surface-container-low rounded-xl p-space-md gap-space-sm" id="route-panel">
+<div className="hidden flex-col bg-surface-container-low rounded-xl p-4 sm:p-space-md gap-space-sm" id="route-panel">
 <div className="flex items-center justify-between pb-1">
 <div className="flex items-center gap-2">
 <span className="material-symbols-outlined text-primary text-[20px]">explore</span>
@@ -98,12 +98,12 @@ export default function CitizenPublicView() {
 </div>
 </div>
 {/*  Short, Plain-Language Safety Guide  */}
-<div className="flex flex-col bg-surface-container-low rounded-xl p-space-md gap-space-md">
+<div className="flex flex-col bg-surface-container-low rounded-xl p-4 sm:p-space-md gap-4 sm:p-space-md">
 <div className="flex items-center gap-2">
 <span className="material-symbols-outlined text-secondary text-[22px]">shield</span>
 <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">Essential Actions for Your Family</h2>
 </div>
-<ul className="flex flex-col gap-space-md list-none m-0 p-0 text-on-surface">
+<ul className="flex flex-col gap-4 sm:p-space-md list-none m-0 p-0 text-on-surface">
 <li className="flex items-start gap-3">
 <div className="w-8 h-8 rounded-full bg-primary-container/40 flex items-center justify-center shrink-0 mt-0.5">
 <span className="material-symbols-outlined text-primary text-[18px]">domain</span>

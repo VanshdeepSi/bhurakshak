@@ -6,8 +6,8 @@ export default function ModelXAIInsights() {
     <div className="w-full min-h-full flex flex-col justify-between bg-background">
       <main className="flex-1 w-full">
         <div className="flex flex-col w-full">
-          <section className="px-space-xl py-space-2xl max-w-7xl mx-auto w-full">
-<div className="flex flex-col md:flex-row md:items-end justify-between pb-space-2xl">
+          <section className="px-3.5 sm:px-space-xl py-4 sm:py-space-2xl max-w-7xl mx-auto w-full">
+<div className="flex flex-col md:flex-row md:items-end justify-between pb-4 sm:pb-space-2xl">
 <div className="space-y-space-xs">
 <div className="flex items-center gap-space-sm text-outline font-label-caps text-label-caps tracking-widest uppercase">
 <span>MODEL INFERENCE &amp; INTERPRETABILITY ENGINE</span>
@@ -67,9 +67,9 @@ export default function ModelXAIInsights() {
 </div>
 </div>
 {/*  Visualizations: 2 Calm, Spacious Instrument Decks  */}
-<div className="grid grid-cols-1 lg:grid-cols-12 gap-space-2xl pt-space-3xl pb-space-2xl">
+<div className="grid grid-cols-1 lg:grid-cols-12 gap-space-2xl pt-space-3xl pb-4 sm:pb-space-2xl">
 {/*  Chart 1: Feature Importance (Horizontal Bar Chart)  */}
-<div className="lg:col-span-7 flex flex-col bg-surface-container-low/60 p-panel-padding rounded-xl shadow-lg">
+<div className="lg:col-span-7 flex flex-col bg-surface-container-low/60 p-4 sm:p-panel-padding rounded-xl shadow-lg">
 <div className="flex items-start justify-between pb-space-xl">
 <div className="space-y-space-xs">
 <span className="font-label-caps text-label-caps text-primary tracking-widest uppercase">Global Explainability (XAI)</span>
@@ -146,7 +146,7 @@ export default function ModelXAIInsights() {
 </div>
 </div>
 {/*  Chart 2: Calibration Curve / Reliability Diagram  */}
-<div className="lg:col-span-5 flex flex-col bg-surface-container-low/60 p-panel-padding rounded-xl shadow-lg">
+<div className="lg:col-span-5 flex flex-col bg-surface-container-low/60 p-4 sm:p-panel-padding rounded-xl shadow-lg">
 <div className="flex items-start justify-between pb-space-lg">
 <div className="space-y-space-xs">
 <span className="font-label-caps text-label-caps text-secondary tracking-widest uppercase">Reliability Diagram</span>
@@ -210,8 +210,8 @@ export default function ModelXAIInsights() {
 </div>
 </div>
 {/*  Geotechnical Field Validation Context Panel  */}
-<div className="pt-space-xl pb-space-2xl">
-<div className="bg-surface-container-low/40 p-panel-padding rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg shadow-sm">
+<div className="pt-space-xl pb-4 sm:pb-space-2xl">
+<div className="bg-surface-container-low/40 p-4 sm:p-panel-padding rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg shadow-sm">
 <div className="flex items-center gap-space-md">
 <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0">
 <span className="material-symbols-outlined text-primary text-[22px]">terrain</span>

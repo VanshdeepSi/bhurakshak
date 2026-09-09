@@ -158,8 +158,8 @@ export default function GoogleAuthModal({ onClose, onAuthSuccess }) {
   const isRedDistrict = selectedDistObj?.tier === 4;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="bg-[#101713] border border-emerald-500/40 rounded-2xl w-full max-w-md shadow-[0_0_50px_rgba(16,185,129,0.25)] overflow-hidden transition-all">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+      <div className="bg-[#101713] border border-emerald-500/40 rounded-2xl w-[95vw] max-w-md max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(16,185,129,0.25)] overflow-hidden transition-all">
         
         {/* Modal Header */}
         <div className="p-5 border-b border-white/[0.08] flex items-center justify-between bg-[#0a0f0d]">

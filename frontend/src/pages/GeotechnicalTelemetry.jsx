@@ -29,24 +29,24 @@ export default function GeotechnicalTelemetry() {
 
   return (
     <div className="flex-1 overflow-y-auto w-full h-full bg-background text-on-surface flex flex-col">
-      <header className="h-16 flex items-center justify-between px-8 border-b border-outline-variant/50 shrink-0">
-        <div className="flex items-center gap-4">
-          <Layers className="text-primary" />
-          <h1 className="text-xl font-semibold tracking-wide uppercase">Geotechnical Telemetry</h1>
+      <header className="min-h-14 py-3 sm:py-0 sm:h-16 flex flex-wrap items-center justify-between px-4 sm:px-8 border-b border-outline-variant/50 shrink-0 gap-2">
+        <div className="flex items-center gap-3">
+          <Layers className="text-primary shrink-0" size={22} />
+          <h1 className="text-base sm:text-xl font-semibold tracking-wide uppercase">Geotechnical Telemetry</h1>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-            <span className="text-sm font-medium text-on-surface-variant">LIVE STREAM</span>
+            <span className="text-xs sm:text-sm font-medium text-on-surface-variant">LIVE STREAM</span>
           </div>
-          <div className="bg-surface-container px-3 py-1 rounded text-sm font-mono">
+          <div className="bg-surface-container px-2.5 py-1 rounded text-xs sm:text-sm font-mono font-semibold">
             {telemetry.active_nodes.toLocaleString()} NODES ACTIVE
           </div>
         </div>
       </header>
 
-      <div className="flex-1 p-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="flex-1 p-4 sm:p-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-surface-container-low border border-outline-variant/50 p-6 rounded-xl flex flex-col gap-2">
             <span className="text-sm text-outline font-bold tracking-wider uppercase">Network Status</span>
             <span className="text-3xl font-bold text-primary">{telemetry.status}</span>
@@ -68,7 +68,8 @@ export default function GeotechnicalTelemetry() {
 
         <h2 className="text-lg font-semibold mb-4 text-on-surface-variant uppercase tracking-wider">Live Node Stream</h2>
         <div className="bg-surface-container-low rounded-xl border border-outline-variant/50 overflow-hidden">
-          <table className="w-full text-left text-sm">
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left text-xs sm:text-sm min-w-[480px]">
             <thead className="bg-surface-container border-b border-outline-variant/50 text-on-surface-variant">
               <tr>
                 <th className="p-4 font-semibold">Node ID</th>
@@ -90,6 +91,7 @@ export default function GeotechnicalTelemetry() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
     </div>

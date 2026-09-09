@@ -2,6 +2,7 @@ import { API_BASE } from '../config/api';
 import React, { useState, useEffect } from 'react';
 import { useAlert } from '../context/AlertContext';
 import axios from 'axios';
+import { Radio, AlertTriangle, Bell, X, CheckCircle2, RefreshCw, Layers, ChevronRight, FilterX, Activity, ShieldAlert } from 'lucide-react';
 
 const JURISDICTIONS = [
   { id: 'ALL', label: 'All NE States' },
@@ -117,11 +118,11 @@ export default function AlertsCenter() {
     <div className="w-full min-h-full flex flex-col justify-between bg-[#0c120f] text-gray-100">
       {/* Sub Telemetry Header */}
       <div className="w-full bg-[#121815]/90 border-b border-white/[0.08] shadow-sm">
-        <div className="h-14 w-full px-6 flex items-center justify-between">
+        <div className="min-h-12 py-2 sm:py-0 sm:h-14 w-full px-3 sm:px-6 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-4">
             <div className="flex flex-col">
               <div className="flex items-center gap-2 text-inherit">
-                <span className="material-symbols-outlined text-emerald-400 text-[20px]">radar</span>
+                <Radio className="text-emerald-400 animate-pulse shrink-0" size={20} />
                 <span className="font-headline-sm text-base text-white font-bold tracking-wider uppercase">BHURAKSHAK ALERTS CENTER</span>
               </div>
               <span className="font-mono text-[10px] text-gray-400 uppercase tracking-widest pl-[28px]">NE REGION TELEMETRY · LIVE STREAM</span>
@@ -167,12 +168,12 @@ export default function AlertsCenter() {
           {/* Dispatch Notice Toast */}
           {dispatchNotice && (
             <div className="fixed top-20 right-6 z-50 max-w-md bg-emerald-950 border border-emerald-500/50 text-emerald-100 px-4 py-3 rounded-lg shadow-2xl flex items-start gap-3 animate-fade-in">
-              <span className="material-symbols-outlined text-emerald-400 text-xl shrink-0">check_circle</span>
+              <CheckCircle2 className="text-emerald-400 shrink-0" size={18} />
               <div className="text-xs">
                 <p className="font-semibold">{dispatchNotice}</p>
               </div>
               <button onClick={() => setDispatchNotice(null)} className="text-emerald-400 hover:text-white ml-auto">
-                <span className="material-symbols-outlined text-base">close</span>
+                <X className="text-emerald-400" size={16} />
               </button>
             </div>
           )}
@@ -183,7 +184,7 @@ export default function AlertsCenter() {
               <div className="max-w-[1720px] mx-auto px-6 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white/20 shrink-0 animate-pulse">
-                    <span className="material-symbols-outlined text-white text-[20px]">warning</span>
+                    <AlertTriangle className="text-white" size={18} />
                   </div>
                   <div className="flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-1 min-w-0">
                     <span className="font-mono text-xs uppercase tracking-widest text-red-200 font-bold shrink-0">
@@ -200,7 +201,7 @@ export default function AlertsCenter() {
                     onClick={(e) => handleDispatchProtocol(e, topCriticalAlert)}
                     className="px-3 py-1.5 bg-white text-[#93000a] hover:bg-red-100 font-mono text-xs uppercase tracking-wider rounded-lg transition-colors font-bold shadow-sm flex items-center gap-1.5"
                   >
-                    <span className="material-symbols-outlined text-[16px]">campaign</span>
+                    <Bell className="text-red-700" size={15} />
                     Dispatch Protocol
                   </button>
                   <button 
@@ -208,7 +209,7 @@ export default function AlertsCenter() {
                     className="px-2 py-1 text-white/80 hover:text-white hover:bg-white/10 rounded transition-colors" 
                     title="Acknowledge & Dismiss"
                   >
-                    <span className="material-symbols-outlined text-[20px]">close</span>
+                    <X className="text-white" size={18} />
                   </button>
                 </div>
               </div>
@@ -216,7 +217,7 @@ export default function AlertsCenter() {
           )}
 
           {/* Operational Filter Deck & Global Metrics */}
-          <div className="w-full max-w-[1720px] mx-auto px-6 pt-8 pb-4">
+          <div className="w-full max-w-[1720px] mx-auto px-3 sm:px-6 pt-4 sm:pt-8 pb-4">
             {/* Context Header & High-Level Telemetry */}
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-white/[0.08]">
               <div className="flex flex-col gap-1 max-w-3xl">
@@ -233,26 +234,23 @@ export default function AlertsCenter() {
                 </p>
               </div>
 
-              {/* Quick Tally Badges (Dynamic Counters) */}
-              <div className="flex items-center gap-6 shrink-0 bg-white/[0.03] border border-white/[0.06] px-5 py-3 rounded-xl">
+              {/* Quick Tally Badges (Responsive 2x2 grid on mobile, 4-inline on sm+) */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-6 bg-white/[0.03] border border-white/[0.06] p-3 sm:px-5 sm:py-3 rounded-xl w-full lg:w-auto">
                 <div className="flex flex-col cursor-pointer" onClick={() => setTierFilter(tierFilter === 4 ? 'ALL' : 4)} title="Click to toggle filter">
                   <span className="font-mono text-[10px] text-gray-400 uppercase">Active Critical</span>
-                  <span className="font-mono text-2xl text-[#C63D3D] font-bold">{String(activeCritical).padStart(2, '0')}</span>
+                  <span className="font-mono text-xl sm:text-2xl text-[#C63D3D] font-bold">{String(activeCritical).padStart(2, '0')}</span>
                 </div>
-                <div className="h-8 w-px bg-white/[0.1]"></div>
                 <div className="flex flex-col cursor-pointer" onClick={() => setTierFilter(tierFilter === 3 ? 'ALL' : 3)} title="Click to toggle filter">
                   <span className="font-mono text-[10px] text-gray-400 uppercase">High Escalation</span>
-                  <span className="font-mono text-2xl text-[#e07a2c] font-bold">{String(highEscalation).padStart(2, '0')}</span>
+                  <span className="font-mono text-xl sm:text-2xl text-[#e07a2c] font-bold">{String(highEscalation).padStart(2, '0')}</span>
                 </div>
-                <div className="h-8 w-px bg-white/[0.1]"></div>
                 <div className="flex flex-col cursor-pointer" onClick={() => setTierFilter(tierFilter === 2 ? 'ALL' : 2)} title="Click to toggle filter">
                   <span className="font-mono text-[10px] text-gray-400 uppercase">Watch Status</span>
-                  <span className="font-mono text-2xl text-[#d4a017] font-bold">{String(watchStatus).padStart(2, '0')}</span>
+                  <span className="font-mono text-xl sm:text-2xl text-[#d4a017] font-bold">{String(watchStatus).padStart(2, '0')}</span>
                 </div>
-                <div className="h-8 w-px bg-white/[0.1]"></div>
                 <div className="flex flex-col cursor-pointer" onClick={() => setTierFilter(tierFilter === 1 ? 'ALL' : 1)} title="Click to toggle filter">
                   <span className="font-mono text-[10px] text-gray-400 uppercase">Nominal Basin</span>
-                  <span className="font-mono text-2xl text-emerald-400 font-bold">{String(nominalBasin).padStart(2, '0')}</span>
+                  <span className="font-mono text-xl sm:text-2xl text-emerald-400 font-bold">{String(nominalBasin).padStart(2, '0')}</span>
                 </div>
               </div>
             </div>
@@ -379,9 +377,9 @@ export default function AlertsCenter() {
           </div>
 
           {/* Primary Alerts Stream */}
-          <div className="w-full max-w-[1720px] mx-auto px-6 pb-16 flex-1">
+          <div className="w-full max-w-[1720px] mx-auto px-3 sm:px-6 pb-16 flex-1">
             {/* Stream Column Meta Header */}
-            <div className="grid grid-cols-12 gap-4 py-3 font-mono text-xs text-gray-400 uppercase tracking-wider border-b border-white/[0.08] select-none">
+            <div className="hidden md:grid grid-cols-12 gap-4 py-3 font-mono text-xs text-gray-400 uppercase tracking-wider border-b border-white/[0.08] select-none">
               <div className="col-span-12 md:col-span-4 lg:col-span-4">Hazard Zone / Sector</div>
               <div className="col-span-4 md:col-span-2 lg:col-span-2">Alert Level</div>
               <div className="col-span-4 md:col-span-2 lg:col-span-2 text-right md:text-left">Failure Probability</div>
@@ -393,12 +391,12 @@ export default function AlertsCenter() {
             <div className="flex flex-col divide-y divide-white/[0.06]" id="alerts-container">
               {loading ? (
                 <div className="py-12 text-center text-gray-400 font-mono text-sm flex items-center justify-center gap-2">
-                  <span className="material-symbols-outlined animate-spin text-emerald-400">sync</span>
+                  <RefreshCw className="animate-spin text-emerald-400" size={18} />
                   Synthesizing telemetry and active alerts...
                 </div>
               ) : filteredAlerts.length === 0 ? (
                 <div className="py-16 text-center text-gray-400 font-mono text-sm bg-white/[0.01] rounded-lg mt-2 border border-white/[0.04]">
-                  <span className="material-symbols-outlined text-gray-500 text-3xl mb-2">filter_alt_off</span>
+                  <FilterX className="text-gray-500 mx-auto mb-2" size={32} />
                   <p className="font-semibold text-gray-300">No alerts match the selected criteria.</p>
                   <p className="text-xs text-gray-500 mt-1">
                     Try changing your Severity Tier ({tierFilter}) or Jurisdiction filter ({stateFilter}).
@@ -464,9 +462,7 @@ export default function AlertsCenter() {
 
                       <div className="hidden lg:flex lg:col-span-2 items-center gap-2">
                         <div className="flex items-center gap-1.5 text-xs font-semibold" style={{color: getTierColor(alert.tier)}}>
-                          <span className="material-symbols-outlined text-[16px]">
-                            {alert.tier >= 3 ? 'crisis_alert' : 'monitoring'}
-                          </span>
+                          {alert.tier >= 3 ? <AlertTriangle size={15} className="shrink-0" /> : <Activity size={15} className="shrink-0" />}
                           <span>{alert.tier >= 3 ? 'Active Threat' : 'Monitoring'}</span>
                         </div>
                       </div>
@@ -478,9 +474,7 @@ export default function AlertsCenter() {
                             {alert.issued_at ? new Date(alert.issued_at).toLocaleTimeString() : 'Recent'}
                           </span>
                         </div>
-                        <span className="material-symbols-outlined text-gray-500 group-hover:text-white transition-transform group-hover:translate-x-1 text-[20px]">
-                          chevron_right
-                        </span>
+                        <ChevronRight className="text-gray-500 group-hover:text-white transition-transform group-hover:translate-x-1 shrink-0" size={18} />
                       </div>
                     </div>
                   </div>
@@ -490,8 +484,8 @@ export default function AlertsCenter() {
 
             {/* Alert Inspection Modal Drawer */}
             {selectedAlert && (
-              <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-                <div className="bg-[#141c18] border border-white/20 rounded-2xl max-w-xl w-full p-6 shadow-2xl animate-scale-up">
+              <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4">
+                <div className="bg-[#141c18] border border-white/20 rounded-2xl max-w-xl w-full max-h-[90vh] flex flex-col p-4 sm:p-6 shadow-2xl animate-scale-up overflow-hidden">
                   <div className="flex items-start justify-between pb-4 border-b border-white/10">
                     <div className="flex flex-col">
                       <div className="flex items-center gap-2">
@@ -508,11 +502,11 @@ export default function AlertsCenter() {
                       onClick={() => setSelectedAlert(null)}
                       className="text-gray-400 hover:text-white p-1 rounded hover:bg-white/10"
                     >
-                      <span className="material-symbols-outlined text-2xl">close</span>
+                      <X className="text-gray-400 hover:text-white" size={20} />
                     </button>
                   </div>
 
-                  <div className="py-4 space-y-4">
+                  <div className="py-4 space-y-4 overflow-y-auto flex-1">
                     <div className="p-3 bg-white/[0.03] border border-white/[0.06] rounded-lg">
                       <span className="text-[10px] font-mono text-gray-400 uppercase">Automated Advisory Message</span>
                       <p className="text-sm text-gray-200 font-medium mt-1">{selectedAlert.message}</p>
@@ -574,7 +568,7 @@ export default function AlertsCenter() {
                       }}
                       className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-mono text-xs uppercase font-bold flex items-center gap-1.5 shadow-lg"
                     >
-                      <span className="material-symbols-outlined text-[16px]">campaign</span>
+                      <Bell className="text-red-700" size={15} />
                       Issue Protocol Notice
                     </button>
                   </div>
@@ -586,7 +580,7 @@ export default function AlertsCenter() {
             <div className="mt-8 pt-4 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-4 text-gray-400 font-mono text-xs uppercase">
               <div className="flex items-center gap-4">
                 <span className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-emerald-400">verified</span>
+                  <CheckCircle2 className="text-emerald-400 shrink-0" size={16} />
                   INCLINOMETER DATA SYNCED VIA GSAT-11
                 </span>
                 <span className="text-gray-700">/</span>

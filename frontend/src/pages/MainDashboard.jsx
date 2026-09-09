@@ -124,6 +124,7 @@ export default function MainDashboard() {
   const [mapCenter, setMapCenter] = useState([26.2, 92.9]);
   const [mapZoom, setMapZoom] = useState(7);
   const [isSearching, setIsSearching] = useState(false);
+  const [showMobileLegend, setShowMobileLegend] = useState(false);
   const searchContainerRef = useRef(null);
 
   // Bounds for North East India (including Sikkim & Darjeeling)
@@ -434,14 +435,22 @@ export default function MainDashboard() {
     <div className="flex-1 flex flex-col relative z-0 h-full">
       <div className="flex-1 w-full bg-[#0c120f] relative overflow-hidden">
         
-        {/* Top Status Bar indicator */}
-        <div className="absolute top-4 left-4 z-[1000] bg-[#121815]/90 backdrop-blur-md rounded-xl shadow-2xl border border-white/[0.1] px-4 py-2 flex items-center space-x-3">
-          <div className={`w-3 h-3 rounded-full ${systemStatus.status.includes('Evaluating') ? 'bg-orange-500 animate-ping' : 'bg-emerald-400'}`}></div>
+        {/* Top Status Bar indicator (Desktop / Tablet) */}
+        <div className="hidden sm:flex absolute top-4 left-4 z-[1000] bg-[#121815]/90 backdrop-blur-md rounded-xl shadow-2xl border border-white/[0.1] px-3.5 py-2 items-center space-x-2.5">
+          <div className={`w-2.5 h-2.5 rounded-full ${systemStatus.status.includes('Evaluating') ? 'bg-orange-500 animate-ping' : 'bg-emerald-400'}`}></div>
           <span className="text-gray-200 font-mono text-xs font-semibold uppercase tracking-wider">{systemStatus.status}</span>
         </div>
 
-        {/* Floating Search Bar with Real-time Autocomplete Dropdown */}
-        <div ref={searchContainerRef} className="absolute top-4 right-4 z-[1000] w-84 md:w-96 flex flex-col">
+        {/* Mobile Mini Status Pill (Stacked below mobile search bar) */}
+        <div className="sm:hidden absolute top-14 left-3 z-[1000] bg-[#121815]/90 backdrop-blur-md rounded-lg border border-white/[0.1] px-2.5 py-1 flex items-center gap-2 shadow-lg">
+          <div className={`w-2 h-2 rounded-full ${systemStatus.status.includes('Evaluating') ? 'bg-orange-500 animate-ping' : 'bg-emerald-400'}`}></div>
+          <span className="text-gray-200 font-mono text-[10px] font-semibold uppercase tracking-wider">
+            {systemStatus.status.includes('Evaluating') ? 'Evaluating...' : 'Live Hazard Active'}
+          </span>
+        </div>
+
+        {/* Floating Search Bar with Real-time Autocomplete Dropdown (Full width on mobile, w-84 on desktop) */}
+        <div ref={searchContainerRef} className="absolute top-3 left-3 right-3 sm:left-auto sm:right-4 sm:top-4 z-[1000] sm:w-84 md:w-96 flex flex-col">
           <form 
             onSubmit={handleSearchSubmit} 
             className="flex items-center px-4 py-2.5 bg-[#121815]/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/[0.12] transition-all focus-within:border-emerald-500/60 focus-within:ring-1 focus-within:ring-emerald-500/30"
@@ -530,25 +539,37 @@ export default function MainDashboard() {
           )}
         </div>
 
-        {/* Legend Overlay */}
-        <div className="absolute bottom-6 left-6 z-[1000] bg-[#121815]/90 backdrop-blur-md rounded-xl p-3.5 border border-white/[0.1] shadow-2xl font-mono text-xs text-gray-300 space-y-2 select-none">
-          <div className="font-bold text-[11px] uppercase tracking-wider text-gray-400 mb-1 border-b border-white/[0.08] pb-1">
-            Regional Hazard Tiers
+        {/* Mobile Legend Toggle Trigger Button */}
+        <button
+          onClick={() => setShowMobileLegend(!showMobileLegend)}
+          className="sm:hidden absolute bottom-20 left-3 z-[1000] bg-[#121815]/95 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/20 text-xs font-mono text-gray-200 shadow-xl flex items-center gap-2 active:scale-95 transition-all"
+        >
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+          <span>{showMobileLegend ? 'Hide Legend' : 'Hazard Legend'}</span>
+        </button>
+
+        {/* Legend Overlay (Always visible on desktop, toggleable on mobile) */}
+        <div className={`absolute bottom-28 sm:bottom-6 left-3 sm:left-6 z-[1000] bg-[#121815]/95 sm:bg-[#121815]/90 backdrop-blur-md rounded-xl p-3 sm:p-3.5 border border-white/[0.15] shadow-2xl font-mono text-[11px] sm:text-xs text-gray-300 space-y-1.5 sm:space-y-2 select-none max-w-[calc(100vw-24px)] transition-all ${
+          showMobileLegend ? 'block' : 'hidden sm:block'
+        }`}>
+          <div className="font-bold text-[10px] sm:text-[11px] uppercase tracking-wider text-gray-400 mb-1 border-b border-white/[0.08] pb-1 flex items-center justify-between">
+            <span>Regional Hazard Tiers</span>
+            <button onClick={() => setShowMobileLegend(false)} className="sm:hidden text-gray-400 hover:text-white ml-2 text-xs">✕</button>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#93000a] border border-[#ffb4ab]"></span>
+            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#93000a] border border-[#ffb4ab] shrink-0"></span>
             <span>Tier 4 · Critical Red (P(F) &ge; 80%)</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#d9772e] border border-[#ffb688]"></span>
+            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#d9772e] border border-[#ffb688] shrink-0"></span>
             <span>Tier 3 · Burnt Orange (Warning)</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#b88909] border border-[#f4be45]"></span>
+            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#b88909] border border-[#f4be45] shrink-0"></span>
             <span>Tier 2 · Ochre Watch</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-[#00522d] border border-[#88d7a2]"></span>
+            <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-[#00522d] border border-[#88d7a2] shrink-0"></span>
             <span>Tier 1 · Baseline Nominal Safe</span>
           </div>
         </div>

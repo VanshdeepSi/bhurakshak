@@ -176,7 +176,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="w-full min-h-full bg-background text-on-background p-4 sm:p-6 lg:p-8 space-y-6 max-w-6xl mx-auto">
+    <div className="w-full min-h-full bg-background text-on-background p-3.5 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 max-w-6xl mx-auto">
       
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant pb-6">
@@ -198,7 +198,7 @@ export default function SettingsPage() {
         <button
           onClick={handleDirectTestAdvisory}
           disabled={sendingTestAdvisory}
-          className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.4)] border border-red-400/50 active:scale-95 transition-all cursor-pointer shrink-0"
+          className="w-full sm:w-auto px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(239,68,68,0.4)] border border-red-400/50 active:scale-95 transition-all cursor-pointer shrink-0"
         >
           <Flame size={15} className="text-yellow-300 animate-bounce" />
           <span>{sendingTestAdvisory ? 'Transmitting...' : 'Send Test Emergency Advisory'}</span>
@@ -208,7 +208,7 @@ export default function SettingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {/* 1. CITIZEN NOTIFICATION CHANNELS & EMERGENCY PROFILE */}
-        <div className="bg-surface-container border border-outline-variant rounded-2xl p-5 sm:p-6 space-y-5 shadow-sm">
+        <div className="bg-surface-container border border-outline-variant rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -295,7 +295,7 @@ export default function SettingsPage() {
         </div>
 
         {/* 2. ACOUSTIC SIRENS & AUDIO CONTROLS */}
-        <div className="bg-surface-container border border-outline-variant rounded-2xl p-5 sm:p-6 space-y-5 shadow-sm">
+        <div className="bg-surface-container border border-outline-variant rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-red-500/10 text-red-400 border border-red-500/20">
@@ -349,7 +349,7 @@ export default function SettingsPage() {
           </div>
 
           {/* Life-Safety Emergency Helplines Card */}
-          <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-3.5 flex items-center justify-between text-xs">
+          <div className="bg-emerald-950/20 border border-emerald-500/20 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
             <div className="space-y-0.5">
               <span className="font-bold text-emerald-400 block">National Disaster Response Helplines</span>
               <span className="text-gray-400 text-[11px]">24/7 State Emergency Operations Center (SEOC)</span>
@@ -363,7 +363,7 @@ export default function SettingsPage() {
         </div>
 
         {/* 3. DEVICE GPS GEOFENCING & LOCATION SENSORS */}
-        <div className="bg-surface-container border border-outline-variant rounded-2xl p-5 sm:p-6 space-y-5 shadow-sm">
+        <div className="bg-surface-container border border-outline-variant rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -418,7 +418,7 @@ export default function SettingsPage() {
         </div>
 
         {/* 4. CONSOLE THEME & DISPLAY PREFERENCES */}
-        <div className="bg-surface-container border border-outline-variant rounded-2xl p-5 sm:p-6 space-y-5 shadow-sm">
+        <div className="bg-surface-container border border-outline-variant rounded-2xl p-4 sm:p-6 space-y-4 sm:space-y-5 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">

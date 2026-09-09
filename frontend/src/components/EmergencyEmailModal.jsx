@@ -10,8 +10,8 @@ export default function EmergencyEmailModal({ emailData, onClose }) {
   const isFailed = emailData.status === 'FAILED' || emailData.status === 'AUTH_ERROR' || emailData.status === 'TRANSMISSION_ERROR';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-      <div className="bg-[#121815] border border-red-500/50 rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(239,68,68,0.35)] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/80 backdrop-blur-md animate-fade-in">
+      <div className="bg-[#121815] border border-red-500/50 rounded-2xl w-[95vw] max-w-3xl max-h-[90vh] flex flex-col shadow-[0_0_50px_rgba(239,68,68,0.35)] overflow-hidden">
         
         {/* Email Client Top Bar */}
         <div className="bg-[#0a0f0d] px-6 py-4 border-b border-white/[0.08] flex items-center justify-between shrink-0">
@@ -115,12 +115,12 @@ export default function EmergencyEmailModal({ emailData, onClose }) {
         </div>
 
         {/* Action Footer */}
-        <div className="bg-[#0d1410] px-6 py-3.5 border-t border-white/[0.08] flex items-center justify-between shrink-0">
+        <div className="bg-[#0d1410] px-4 sm:px-6 py-3 sm:py-3.5 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2 text-xs text-gray-400">
-            <Shield size={14} className="text-emerald-400" />
-            <span>Digital signature authenticated via National Disaster Management Authority (NDMA).</span>
+            <Shield size={14} className="text-emerald-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs">Digital signature authenticated via NDMA.</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             {!isRealDelivery && (
               <Link
                 to="/settings"

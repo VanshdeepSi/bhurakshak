@@ -25,7 +25,7 @@ export default function App() {
             <Sidebar />
             <div className="flex-1 flex flex-col min-w-0">
               <TopBar />
-              <div className="flex-1 flex flex-col overflow-y-auto w-full h-full relative">
+              <div className="flex-1 flex flex-col overflow-y-auto w-full h-full relative pb-16 md:pb-0">
                 <Routes>
                   <Route path="/" element={<MainDashboard />} />
                   <Route path="/alerts" element={<AlertsCenter />} />

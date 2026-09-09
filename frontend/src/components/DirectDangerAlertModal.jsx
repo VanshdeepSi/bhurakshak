@@ -83,8 +83,8 @@ export default function DirectDangerAlertModal({
   const isUnconfigured = localDelivery?.status === 'UNCONFIGURED';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in">
-      <div className="bg-[#101713] border-2 border-red-500 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-[0_0_60px_rgba(239,68,68,0.45)] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-black/85 backdrop-blur-md animate-fade-in">
+      <div className="bg-[#101713] border-2 border-red-500 rounded-2xl w-[95vw] max-w-2xl max-h-[92vh] flex flex-col shadow-[0_0_60px_rgba(239,68,68,0.45)] overflow-hidden">
         
         {/* Urgent Pulsing Alert Header */}
         <div className="bg-gradient-to-r from-red-950 via-red-900 to-red-950 px-5 sm:px-6 py-4 border-b border-red-500/40 flex items-center justify-between shrink-0">
@@ -294,17 +294,17 @@ export default function DirectDangerAlertModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="bg-[#0b100d] px-5 sm:px-6 py-3.5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="bg-[#0b100d] px-4 sm:px-6 py-3 sm:py-3.5 border-t border-white/[0.08] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shrink-0">
           <Link 
             to={`/district/${encodeURIComponent(district)}`}
             onClick={onClose}
-            className="text-xs text-emerald-400 hover:text-emerald-300 font-mono flex items-center gap-1 no-underline"
+            className="text-xs text-emerald-400 hover:text-emerald-300 font-mono flex items-center justify-center sm:justify-start gap-1 no-underline"
           >
             <span>View Full District Telemetry Report</span>
             <ArrowRight size={13} />
           </Link>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             <Link
               to="/settings"
               onClick={onClose}

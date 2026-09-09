@@ -224,10 +224,10 @@ Generated autonomously by BhuRakshak AI Multi-Hazard Predictive Engine v3.8.
   return (
     <div className="w-full min-h-full flex flex-col justify-between bg-background text-on-background">
       <main className="flex-1 w-full">
-        <div className="flex flex-col w-full px-6 lg:px-8 py-8 max-w-7xl mx-auto gap-8">
+        <div className="flex flex-col w-full px-3.5 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-7xl mx-auto gap-5 sm:gap-8">
           
           {/* Back link & Top Bar */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <Link 
               to="/" 
               className="inline-flex items-center gap-2 text-xs font-mono text-on-surface-variant hover:text-emerald-400 transition-colors no-underline"
@@ -236,8 +236,8 @@ Generated autonomously by BhuRakshak AI Multi-Hazard Predictive Engine v3.8.
               <span>Return to Northeast GIS Map</span>
             </Link>
 
-            <span className="font-mono text-xs text-on-surface-variant uppercase">
-              Sensor Node Telemetry · Refreshed {new Date().toLocaleTimeString()}
+            <span className="font-mono text-[11px] sm:text-xs text-on-surface-variant uppercase">
+              Node Telemetry · Synced {new Date().toLocaleTimeString()}
             </span>
           </div>
 
@@ -268,7 +268,7 @@ Generated autonomously by BhuRakshak AI Multi-Hazard Predictive Engine v3.8.
             </div>
 
             {/* Status Banner / Badge */}
-            <div className={`flex items-center gap-4 px-6 py-3.5 rounded-2xl border shadow-lg ${
+            <div className={`flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-3.5 rounded-2xl border shadow-lg ${
               isTier4 
                 ? 'bg-red-950/60 border-red-500/60 text-red-100 shadow-[0_0_25px_rgba(239,68,68,0.3)]' 
                 : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-100'
@@ -340,7 +340,7 @@ Generated autonomously by BhuRakshak AI Multi-Hazard Predictive Engine v3.8.
 
             {/* Geotechnical Telemetry Bento (5 cols) */}
             <div className="lg:col-span-5 grid grid-cols-2 gap-4">
-              <div className="bg-surface-container-low border border-white/[0.08] p-5 rounded-2xl flex flex-col justify-between">
+              <div className="bg-surface-container-low border border-white/[0.08] p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between">
                 <span className="font-mono text-xs text-outline uppercase">Factor of Safety (FS)</span>
                 <div>
                   <div className={`text-3xl font-extrabold ${profile.factorOfSafety < 1.0 ? 'text-red-400' : 'text-emerald-400'}`}>
@@ -350,17 +350,17 @@ Generated autonomously by BhuRakshak AI Multi-Hazard Predictive Engine v3.8.
                 </div>
               </div>
 
-              <div className="bg-surface-container-low border border-white/[0.08] p-5 rounded-2xl flex flex-col justify-between">
+              <div className="bg-surface-container-low border border-white/[0.08] p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between">
                 <span className="font-mono text-xs text-outline uppercase">24h Cumulative Rain</span>
                 <div>
-                  <div className="text-3xl font-extrabold text-on-surface">
+                  <div className="text-2xl sm:text-3xl font-extrabold text-on-surface">
                     {profile.rainfall24h} <span className="text-sm font-normal text-on-surface-variant">mm</span>
                   </div>
                   <span className="text-[11px] text-on-surface-variant font-mono">7-Day: {profile.rainfall7d} mm</span>
                 </div>
               </div>
 
-              <div className="bg-surface-container-low border border-white/[0.08] p-5 rounded-2xl flex flex-col justify-between">
+              <div className="bg-surface-container-low border border-white/[0.08] p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between">
                 <span className="font-mono text-xs text-outline uppercase">Displacement Rate</span>
                 <div>
                   <div className={`text-2xl font-extrabold ${isTier4 ? 'text-red-400' : 'text-on-surface'}`}>
@@ -370,7 +370,7 @@ Generated autonomously by BhuRakshak AI Multi-Hazard Predictive Engine v3.8.
                 </div>
               </div>
 
-              <div className="bg-surface-container-low border border-white/[0.08] p-5 rounded-2xl flex flex-col justify-between">
+              <div className="bg-surface-container-low border border-white/[0.08] p-3.5 sm:p-5 rounded-2xl flex flex-col justify-between">
                 <span className="font-mono text-xs text-outline uppercase">Pore Water Pressure</span>
                 <div>
                   <div className="text-2xl font-extrabold text-on-surface">
@@ -384,7 +384,7 @@ Generated autonomously by BhuRakshak AI Multi-Hazard Predictive Engine v3.8.
           </div>
 
           {/* Geological Fault Pre-Condition */}
-          <div className="bg-surface-container-low border border-white/[0.08] rounded-2xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-sm">
+          <div className="bg-surface-container-low border border-white/[0.08] rounded-2xl p-4 sm:p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6 shadow-sm">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shrink-0 text-emerald-400">
                 <Mountain size={24} />

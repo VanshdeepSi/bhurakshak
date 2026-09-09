@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { 
   User, LogOut, Mail, Bell, Shield, AlertTriangle, MapPin, 
-  ChevronDown, CheckCircle, Settings, Compass, Sun, Moon, Flame
+  ChevronDown, CheckCircle, Settings, Compass, Sun, Moon, Flame, Clock
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -176,12 +176,12 @@ export default function TopBar() {
 
   return (
     <>
-      <header className="h-20 bg-background/90 backdrop-blur-md flex items-center justify-between px-4 sm:px-6 lg:px-8 w-full z-40 border-b border-outline-variant/50 shrink-0 select-none">
+      <header className="h-16 sm:h-20 bg-background/90 backdrop-blur-md flex items-center justify-between px-3 sm:px-6 lg:px-8 w-full z-40 border-b border-outline-variant/50 shrink-0 select-none">
         
         {/* Left: Custom Bespoke Brand Logo & Breadcrumb */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
           <Link to="/" className="no-underline">
-            <BhuRakshakLogo size={36} showText={true} />
+            <BhuRakshakLogo size={28} showText={true} />
           </Link>
 
           {/* Breadcrumb if inside District Page */}
@@ -216,16 +216,17 @@ export default function TopBar() {
         )}
 
         {/* Right: Test Red Alert Button, Quick Tools, Theme Toggle, Dynamic Clock & User Profile */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
           
           {/* PROMINENT DIRECT "TEST RED ALERT" BUTTON */}
           <button
             onClick={handleTriggerTestAlert}
-            className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_18px_rgba(239,68,68,0.6)] border border-red-400/60 active:scale-95 transition-all animate-pulse cursor-pointer"
+            className="px-2 sm:px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-xl text-[11px] sm:text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-1 sm:gap-1.5 shadow-[0_0_18px_rgba(239,68,68,0.6)] border border-red-400/60 active:scale-95 transition-all animate-pulse cursor-pointer shrink-0"
             title="Click to directly trigger emergency siren, screen alert overlay, and real email dispatch"
           >
-            <Flame size={14} className="text-yellow-300" />
-            <span>Test Red Alert</span>
+            <Flame size={13} className="text-yellow-300 shrink-0" />
+            <span className="hidden sm:inline">Test Red Alert</span>
+            <span className="sm:hidden">Alert</span>
           </button>
 
           {/* Quick GPS Geofence Detect Button */}
@@ -233,7 +234,7 @@ export default function TopBar() {
             onClick={handleTopGpsDetect}
             disabled={locating}
             title="Detect My Live Device Location"
-            className="p-2 text-on-surface-variant hover:text-emerald-400 bg-surface-container hover:bg-surface-container-high rounded-xl border border-white/[0.06] transition-all flex items-center gap-1.5 active:scale-95 text-xs font-mono cursor-pointer"
+            className="p-1.5 sm:p-2 text-on-surface-variant hover:text-emerald-400 bg-surface-container hover:bg-surface-container-high rounded-xl border border-white/[0.06] transition-all flex items-center gap-1.5 active:scale-95 text-xs font-mono cursor-pointer shrink-0"
           >
             <Compass size={16} className={locating ? 'animate-spin text-emerald-400' : 'text-emerald-400'} />
             <span className="hidden lg:inline">{locating ? 'Locating...' : 'GPS Geofence'}</span>
@@ -243,14 +244,14 @@ export default function TopBar() {
           <button
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-            className="p-2 text-on-surface-variant hover:text-emerald-400 bg-surface-container hover:bg-surface-container-high rounded-xl border border-white/[0.06] transition-all cursor-pointer"
+            className="p-1.5 sm:p-2 text-on-surface-variant hover:text-emerald-400 bg-surface-container hover:bg-surface-container-high rounded-xl border border-white/[0.06] transition-all cursor-pointer shrink-0"
           >
             {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
           </button>
 
           {/* Dynamic Clock */}
           <div className="hidden lg:flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-xl font-mono text-xs text-emerald-400 font-bold border border-white/[0.06]">
-            <span className="material-symbols-outlined text-[16px]">schedule</span>
+            <Clock size={15} className="text-emerald-400 shrink-0" />
             {time}
           </div>
 
@@ -259,7 +260,7 @@ export default function TopBar() {
             /* Sign in with Google Button */
             <button
               onClick={() => setShowAuthModal(true)}
-              className="flex items-center gap-2 px-3.5 py-2 bg-white hover:bg-gray-100 text-gray-900 rounded-xl font-semibold text-xs transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-95 cursor-pointer"
+              className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-1.5 sm:py-2 bg-white hover:bg-gray-100 text-gray-900 rounded-xl font-semibold text-[11px] sm:text-xs transition-all shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-95 cursor-pointer shrink-0"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -267,7 +268,7 @@ export default function TopBar() {
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
               </svg>
-              <span>Sign in with Google</span>
+              <span className="hidden sm:inline">Sign in with Google</span><span className="sm:hidden">Sign In</span>
             </button>
           ) : (
             /* Logged in User Badge & Dropdown */
@@ -285,11 +286,11 @@ export default function TopBar() {
                   alt="avatar" 
                   className={`w-7 h-7 rounded-lg bg-black/40 border ${isRedAlert ? 'border-red-400' : 'border-emerald-400/60'}`}
                 />
-                <div className="flex flex-col text-left">
-                  <span className="text-xs font-semibold text-on-surface leading-tight">{user.name || user.email.split('@')[0]}</span>
+                <div className="hidden sm:flex flex-col text-left">
+                  <span className="text-xs font-semibold text-on-surface leading-tight truncate max-w-[110px]">{user.name || user.email.split('@')[0]}</span>
                   <span className={`text-[10px] font-mono leading-tight flex items-center gap-1 ${isRedAlert ? 'text-red-400 font-bold' : 'text-emerald-400'}`}>
                     <MapPin size={10} />
-                    {user.district} {isRedAlert ? '(Red Alert!)' : ''}
+                    {user.district} {isRedAlert ? '(!)' : ''}
                   </span>
                 </div>
                 <ChevronDown size={14} className="text-gray-400" />
@@ -297,7 +298,7 @@ export default function TopBar() {
 
               {/* User Dropdown Menu */}
               {showUserDropdown && (
-                <div className="absolute right-0 mt-2 w-72 bg-surface-container-low border border-white/[0.12] rounded-xl shadow-2xl p-3 z-50 animate-fade-in flex flex-col gap-3">
+                <div className="absolute right-0 mt-2 w-72 max-w-[calc(100vw-24px)] bg-surface-container-low border border-white/[0.12] rounded-xl shadow-2xl p-3 z-50 animate-fade-in flex flex-col gap-3">
                   <div className="border-b border-white/[0.06] pb-2.5">
                     <p className="text-xs text-on-surface-variant font-mono">Logged in via Google</p>
                     <p className="text-xs font-semibold text-on-surface truncate">{user.email}</p>
