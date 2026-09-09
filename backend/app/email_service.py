@@ -131,10 +131,30 @@ Direct Citizen Alert Mesh
                     "resend_id": res_data.get("id")
                 }
             else:
-                err_body = res.text
-                print(f"[RESEND HTTP ERROR] Status {res.status_code}: {err_body}")
+                try:
+                    err_json = res.json()
+                    err_msg = err_json.get("message") or res.text
+                except Exception:
+                    err_msg = res.text
+                print(f"[RESEND HTTP ERROR] Status {res.status_code}: {err_msg}")
+                return {
+                    "success": False,
+                    "real_sent": False,
+                    "status": "RESEND_ERROR",
+                    "error": f"Resend API Error: {err_msg}",
+                    "message": f"Resend API: {err_msg}",
+                    "recipient": to_email
+                }
         except Exception as e:
             print(f"[RESEND EXCEPTION] {e}")
+            return {
+                "success": False,
+                "real_sent": False,
+                "status": "RESEND_EXCEPTION",
+                "error": f"Resend Connection Error: {str(e)}",
+                "message": f"Resend Connection Error: {str(e)}",
+                "recipient": to_email
+            }
 
     # -------------------------------------------------------------------------
     # METHOD 2: Google Apps Script Webhook Relay (Port 443 HTTPS)
