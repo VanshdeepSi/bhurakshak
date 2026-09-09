@@ -1,0 +1,36 @@
+{
+    "roc_auc": 0.8099749914850632,
+    "pr_auc": 0.7732551342439566,
+    "accuracy": 0.7390786696184936,
+    "f1_score": 0.7788776717879914,
+    "best_threshold": 0.48,
+    "brier_score": 0.186495998823972,
+    "best_params": {
+        "subsample": 0.8,
+        "reg_lambda": 5.0,
+        "reg_alpha": 0,
+        "min_child_weight": 1,
+        "max_depth": 5,
+        "learning_rate": 0.01,
+        "gamma": 0,
+        "colsample_bytree": 0.8
+    },
+    "features": [
+        "slope",
+        "profile_curvature",
+        "planar_curvature",
+        "lithology",
+        "twi",
+        "rainfall",
+        "ndvi",
+        "distance_to_river",
+        "distance_to_fault",
+        "slope_structure",
+        "rainfall_slope_interaction",
+        "saturation_potential",
+        "fault_vulnerability",
+        "stream_power_index_approx",
+        "disturbance_index",
+        "hydro_stress"
+    ]
+}

@@ -1,0 +1,9 @@
+{
+  "smtp_host": "smtp.gmail.com",
+  "smtp_port": 587,
+  "smtp_user": "vanshdeepsb@gmail.com",
+  "smtp_password": "ymzf jaxh qyql kvkj",
+  "smtp_from_name": "NDMA BhuRakshak Automated Mesh",
+  "smtp_from_email": "vanshdeepsb@gmail.com",
+  "smtp_use_tls": true
+}
