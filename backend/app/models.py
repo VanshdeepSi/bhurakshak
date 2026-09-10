@@ -72,3 +72,25 @@ class EmergencyEmailLog(Base):
     body_html = Column(Text)
     status = Column(String, default="DISPATCHED")
     sent_at = Column(DateTime(timezone=True), server_default=func.now())
+
+
+class ModelPerformanceLedger(Base):
+    __tablename__ = "model_performance_ledger"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    version = Column(String, index=True)
+    run_number = Column(Integer, default=1)
+    timestamp = Column(DateTime(timezone=True), server_default=func.now())
+    training_samples = Column(Integer, default=28450)
+    f1_score = Column(Float)
+    recall = Column(Float)
+    precision = Column(Float)
+    roc_auc = Column(Float, default=0.923)
+    threshold = Column(Float, default=0.470)
+    drift_psi = Column(Float, default=0.038)
+    delta_f1 = Column(Float, default=0.0)
+    delta_recall = Column(Float, default=0.0)
+    delta_precision = Column(Float, default=0.0)
+    status = Column(String, default="ACTIVE_CHAMPION")
+    is_active = Column(Integer, default=0)
+    notes = Column(Text, nullable=True)

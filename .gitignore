@@ -33,3 +33,7 @@ Thumbs.db
 # Environment local overrides (keep .example)
 .env.local
 .env.*.local
+
+# SQLite local databases
+bhurakshak.db
+*.sqlite3
