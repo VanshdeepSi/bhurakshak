@@ -1,6 +1,7 @@
 
 import usePageMeta from '../utils/usePageMeta';
 import React from 'react';
+import { ShieldCheck, BarChart3, TrendingUp, Mountain } from 'lucide-react';
 
 export default function ModelXAIInsights() {
   usePageMeta(`XAI Model Insights`, `Explainable AI insights with SHAP feature importance and model prediction transparency for landslide risk assessment.`);
@@ -27,7 +28,7 @@ export default function ModelXAIInsights() {
 </div>
 <div className="mt-space-lg md:mt-0 flex items-center gap-space-md">
 <div className="bg-surface-container-low px-space-md py-space-sm rounded-lg flex items-center gap-space-sm shadow-sm">
-<span className="material-symbols-outlined text-outline text-[18px]">verified_user</span>
+<ShieldCheck size={18} className="text-outline shrink-0" />
 <span className="font-label-caps text-label-caps text-on-surface uppercase tracking-wider">SHAP TreeExplainer Calibrated</span>
 </div>
 </div>
@@ -79,7 +80,7 @@ export default function ModelXAIInsights() {
 <h2 className="font-headline-sm text-headline-sm text-on-surface">Mean Absolute SHAP Contributions</h2>
 <p className="font-body-sm text-body-sm text-on-surface-variant">Top geotechnical drivers governing localized mass-wasting probability</p>
 </div>
-<span className="material-symbols-outlined text-outline-variant text-[22px]">bar_chart</span>
+<BarChart3 size={22} className="text-outline-variant shrink-0" />
 </div>
 <div className="space-y-space-lg flex-1 flex flex-col justify-around py-space-sm">
 {/*  Feature 1  */}
@@ -156,7 +157,7 @@ export default function ModelXAIInsights() {
 <h2 className="font-headline-sm text-headline-sm text-on-surface">Probability Calibration</h2>
 <p className="font-body-sm text-body-sm text-on-surface-variant">Predicted probability vs observed empirical slide frequency</p>
 </div>
-<span className="material-symbols-outlined text-outline-variant text-[22px]">show_chart</span>
+<TrendingUp size={22} className="text-outline-variant shrink-0" />
 </div>
 {/*  Inline SVG Calibration Chart  */}
 <div className="relative w-full aspect-square flex items-center justify-center py-space-sm">
@@ -217,7 +218,7 @@ export default function ModelXAIInsights() {
 <div className="bg-surface-container-low/40 p-4 sm:p-panel-padding rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg shadow-sm">
 <div className="flex items-center gap-space-md">
 <div className="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center shrink-0">
-<span className="material-symbols-outlined text-primary text-[22px]">terrain</span>
+<Mountain size={22} className="text-primary shrink-0" />
 </div>
 <div>
 <span className="font-label-caps text-label-caps text-outline uppercase tracking-wider block">Terrain Sensor Mesh Synchrony</span>
