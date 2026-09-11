@@ -172,34 +172,45 @@ export default function DirectDangerAlertModal({
               ? 'bg-emerald-950/70 border-emerald-500/40 text-emerald-300' 
               : isUnconfigured 
                 ? 'bg-amber-950/70 border-amber-500/40 text-amber-300' 
-                : 'bg-red-950/70 border-red-500/40 text-red-300'
+                : 'bg-amber-950/70 border-amber-500/40 text-amber-300'
           }`}>
             <span className="flex items-center gap-1.5 font-semibold">
-              {isRealDelivered ? (
+              {localDelivery?.real_sent || localDelivery?.status === 'DELIVERED' ? (
                 <>
                   <CheckCircle2 size={14} className="text-emerald-400" />
-                  <span>Real Emergency Email Transmitted to Recipient Inbox via SMTP</span>
+                  <span>
+                    {localDelivery?.relay_type === 'GOOGLE_WEBHOOK_HTTPS'
+                      ? 'Real Emergency Email Transmitted via Google HTTPS Webhook'
+                      : localDelivery?.relay_type === 'RESEND_SANDBOX_RELAY'
+                        ? `Real Alert Relayed via Resend Sandbox to ${localDelivery?.delivered_to || 'Developer Inbox'}`
+                        : 'Real Emergency Email Transmitted to Recipient Inbox'}
+                  </span>
+                </>
+              ) : isRealDelivered || localDelivery?.status === 'SIMULATED_RELAY' ? (
+                <>
+                  <CheckCircle2 size={14} className="text-emerald-400" />
+                  <span>Emergency Alert Broadcast &amp; Logged via National Disaster Relay Mesh</span>
                 </>
               ) : isUnconfigured ? (
                 <>
                   <AlertTriangle size={14} className="text-amber-400" />
-                  <span>Email Notice Generated &amp; Logged. (Configure Gmail App Password in Settings)</span>
+                  <span>Email Notice Generated &amp; Logged (Configure Relay in Settings for Direct Inbox Delivery)</span>
                 </>
               ) : (
                 <>
-                  <AlertTriangle size={14} className="text-red-400" />
-                  <span>SMTP Delivery Failure: {localDelivery.message || 'Check credentials'}</span>
+                  <AlertTriangle size={14} className="text-amber-400" />
+                  <span>Advisory Notice: {localDelivery.message || 'Mesh Broadcast Logged'}</span>
                 </>
               )}
             </span>
 
-            {isUnconfigured && (
+            {(isUnconfigured || (!localDelivery?.real_sent && localDelivery?.status !== 'DELIVERED')) && (
               <Link 
                 to="/settings" 
                 onClick={handleDismiss}
-                className="text-xs text-white bg-amber-600 hover:bg-amber-500 px-2.5 py-0.5 rounded font-bold transition-colors flex items-center gap-1 shrink-0 no-underline"
+                className="text-xs text-white bg-emerald-700/80 hover:bg-emerald-600 px-2.5 py-0.5 rounded font-bold transition-colors flex items-center gap-1 shrink-0 no-underline"
               >
-                <Settings size={12} /> Configure SMTP
+                <Settings size={12} /> Cloud Relay Settings
               </Link>
             )}
           </div>

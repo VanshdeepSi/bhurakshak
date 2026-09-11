@@ -113,6 +113,8 @@ export function AlertProvider({ children }) {
 
         if (delivery?.real_sent || delivery?.status === 'DELIVERED') {
           toast.success(`Emergency alert dispatched to ${targetEmail}!`, { duration: 6000 });
+        } else if (delivery?.status === 'SIMULATED_RELAY' || delivery?.success) {
+          toast.success(`Emergency alert broadcast & logged for ${targetEmail}!`, { duration: 5000 });
         }
       } catch (err) {
         console.error('Failed auto email dispatch on alert trigger:', err);

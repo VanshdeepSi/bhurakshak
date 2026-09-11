@@ -870,7 +870,7 @@ def update_user_subscription(req: UpdateSubscriptionRequest, db: Session = Depen
             html_body=html,
             district=user.district
         )
-        delivery_status = "DELIVERED" if smtp_res.get("real_sent") else ("UNCONFIGURED" if smtp_res.get("status") == "UNCONFIGURED" else "FAILED")
+        delivery_status = "DELIVERED" if smtp_res.get("real_sent") else ("SIMULATED" if smtp_res.get("status") == "SIMULATED_RELAY" else ("UNCONFIGURED" if smtp_res.get("status") == "UNCONFIGURED" else "FAILED"))
 
         email_log = models.EmergencyEmailLog(
             user_email=user.email,
@@ -1002,7 +1002,7 @@ def send_alert_email_manual(req: SendAlertEmailRequest, db: Session = Depends(ge
         district=district
     )
     
-    delivery_status = "DELIVERED" if smtp_res.get("real_sent") else ("UNCONFIGURED" if smtp_res.get("status") == "UNCONFIGURED" else "FAILED")
+    delivery_status = "DELIVERED" if smtp_res.get("real_sent") else ("SIMULATED" if smtp_res.get("status") == "SIMULATED_RELAY" else ("UNCONFIGURED" if smtp_res.get("status") == "UNCONFIGURED" else "FAILED"))
     
     email_log = models.EmergencyEmailLog(
         user_email=req.email,
