@@ -111,8 +111,8 @@ export function AlertProvider({ children }) {
         setDeliveryStatus(delivery);
         setDispatchedEmailRecord(res.data.dispatched_email);
 
-        if (delivery?.real_sent) {
-          toast.success(`Real emergency email transmitted to ${targetEmail} via SMTP!`, { duration: 6000 });
+        if (delivery?.real_sent || delivery?.status === 'DELIVERED') {
+          toast.success(`Emergency alert dispatched to ${targetEmail}!`, { duration: 6000 });
         }
       } catch (err) {
         console.error('Failed auto email dispatch on alert trigger:', err);

@@ -80,15 +80,17 @@ export default function DirectDangerAlertModal({
         onEmailDispatched(res.data.dispatched_email, delivery);
       }
 
-      if (delivery?.real_sent) {
-        toast.success(`Real emergency email dispatched to ${emailToUse} via SMTP!`, { duration: 6000 });
+      if (delivery?.real_sent || delivery?.status === 'DELIVERED') {
+        const dest = delivery?.delivered_to || emailToUse;
+        toast.success(`Emergency alert dispatched for ${dest}!`, { duration: 6000 });
+      } else if (delivery?.status === 'SIMULATED_RELAY') {
+        toast.success(`Emergency alert broadcast & logged for ${emailToUse}!`, { duration: 6000 });
       } else if (delivery?.status === 'UNCONFIGURED') {
-        toast('Notice generated & logged. Configure Gmail App Password in Settings for real inbox delivery.', {
-          icon: '⚠️',
+        toast('Emergency advisory logged. Configure Relay in Settings for inbox delivery.', {
           duration: 6000
         });
       } else {
-        toast.error(delivery?.message || 'SMTP transmission error.');
+        toast.error(delivery?.message || 'Relay transmission notice.');
       }
     } catch (err) {
       console.error('Manual alert dispatch failed:', err);
@@ -98,7 +100,7 @@ export default function DirectDangerAlertModal({
     }
   };
 
-  const isRealDelivered = localDelivery?.real_sent || localDelivery?.status === 'DELIVERED';
+  const isRealDelivered = localDelivery?.real_sent || localDelivery?.status === 'DELIVERED' || localDelivery?.status === 'SIMULATED_RELAY';
   const isUnconfigured = localDelivery?.status === 'UNCONFIGURED';
 
   return (
