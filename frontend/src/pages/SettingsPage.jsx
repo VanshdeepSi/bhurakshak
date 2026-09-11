@@ -3,7 +3,7 @@ import {
   Settings, Moon, Sun, Shield, MapPin, Compass, Bell, Volume2, 
   VolumeX, RefreshCw, Database, Radio, Mail, Key, CheckCircle2, 
   AlertTriangle, Trash2, Download, ExternalLink, Loader2, Send,
-  HelpCircle, Server, Check, Lock, ChevronDown, ChevronUp, UserCheck, Flame
+  HelpCircle, Server, Check, Lock, ChevronDown, ChevronUp, UserCheck, Flame, Copy
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -39,6 +39,9 @@ export default function SettingsPage() {
   const [smtpPort, setSmtpPort] = useState(587);
   const [smtpConfigured, setSmtpConfigured] = useState(false);
   const [savingAdminConfig, setSavingAdminConfig] = useState(false);
+  const [googleWebhookUrl, setGoogleWebhookUrl] = useState('');
+  const [showWebhookGuide, setShowWebhookGuide] = useState(false);
+  const [copiedScript, setCopiedScript] = useState(false);
 
   // Restore authenticated citizen session
   useEffect(() => {
@@ -62,6 +65,9 @@ export default function SettingsPage() {
         setSmtpHost(res.data.smtp_host || 'smtp.gmail.com');
         setSmtpPort(res.data.smtp_port || 587);
         setSmtpUser(res.data.smtp_user || '');
+        if (res.data.google_webhook_url) {
+          setGoogleWebhookUrl(res.data.google_webhook_url);
+        }
       }
     } catch (_) {}
   };
@@ -151,7 +157,8 @@ export default function SettingsPage() {
         smtp_port: parseInt(smtpPort, 10) || 587,
         smtp_user: smtpUser.trim(),
         smtp_password: smtpPass.trim(),
-        resend_api_key: resendApiKey.trim()
+        resend_api_key: resendApiKey.trim(),
+        google_webhook_url: googleWebhookUrl.trim()
       };
       const res = await axios.post(`${API_BASE}/settings/smtp`, payload);
       if (res.data.success) {
@@ -509,25 +516,99 @@ export default function SettingsPage() {
 
         {/* Collapsible Content */}
         {showAdminRelay && (
-          <div className="p-5 sm:p-6 border-t border-white/[0.08] bg-black/60 space-y-4 animate-fade-in">
-            <div className="bg-emerald-950/30 border border-emerald-500/30 rounded-xl p-3 text-xs text-emerald-300 font-mono flex items-center gap-2">
-              <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
-              <span>Cloud Relay Active: Render backend is configured with Resend API for zero-port-block HTTPS delivery.</span>
+          <div className="p-5 sm:p-6 border-t border-white/[0.08] bg-black/60 space-y-5 animate-fade-in">
+            {/* Relay Status Banner */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border font-mono text-xs bg-emerald-950/30 border-emerald-500/30 text-emerald-300">
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                <span>
+                  {googleWebhookUrl
+                    ? 'HTTPS Webhook Active: Google Apps Script relay enabled for direct delivery to ANY citizen or judge inbox.'
+                    : 'Cloud Relay Active: Render backend is configured with Resend API fallback (Port 443 HTTPS).'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowWebhookGuide(!showWebhookGuide)}
+                className="text-[11px] text-accent-cyan hover:underline flex items-center gap-1 shrink-0 cursor-pointer font-bold"
+              >
+                {showWebhookGuide ? 'Hide Setup Guide' : '📋 How to get Webhook URL (2 min)'}
+              </button>
             </div>
 
+            {/* Quick 2-Minute Google Apps Script Guide */}
+            {showWebhookGuide && (
+              <div className="bg-surface-container-high/80 border border-accent-cyan/30 rounded-xl p-4 text-xs font-mono text-gray-300 space-y-3 animate-fade-in">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-accent-cyan flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                    ⚡ Google Apps Script 2-Minute Setup (Send to ANY Email Free)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const code = `function doPost(e) {\n  var data = JSON.parse(e.postData.contents);\n  MailApp.sendEmail({\n    to: data.to,\n    subject: data.subject,\n    htmlBody: data.html\n  });\n  return ContentService.createTextOutput(JSON.stringify({status: "ok"})).setMimeType(ContentService.MimeType.JSON);\n}`;
+                      navigator.clipboard.writeText(code);
+                      setCopiedScript(true);
+                      toast.success('Script copied to clipboard!');
+                      setTimeout(() => setCopiedScript(false), 2000);
+                    }}
+                    className="px-2.5 py-1 bg-accent-cyan/20 hover:bg-accent-cyan/30 text-accent-cyan border border-accent-cyan/40 rounded text-[10px] font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                  >
+                    {copiedScript ? <Check size={12} /> : <Copy size={12} />}
+                    {copiedScript ? 'Copied!' : 'Copy Script Code'}
+                  </button>
+                </div>
+
+                <ol className="list-decimal list-inside space-y-1.5 text-gray-300 text-[11px] leading-relaxed">
+                  <li>Go to <a href="https://script.google.com" target="_blank" rel="noreferrer" className="text-accent-cyan underline">script.google.com</a> and click <strong>"New project"</strong>.</li>
+                  <li>Paste the copied snippet into the editor (replace existing code).</li>
+                  <li>Click <strong>Deploy &gt; New deployment</strong>. Select type: <strong>Web app</strong> (gear icon).</li>
+                  <li>Set <em>Execute as:</em> <strong>Me</strong> and <em>Who has access:</em> <strong>Anyone</strong>.</li>
+                  <li>Click <strong>Deploy</strong>, grant permission with your Google account, and copy the <strong>Web app URL</strong>.</li>
+                  <li>Paste that URL into the <strong>Google Webhook URL</strong> field below and click <strong>Save Server Settings</strong>.</li>
+                </ol>
+              </div>
+            )}
+
             <form onSubmit={handleSaveAdminRelay} className="space-y-4">
+              {/* PRIMARY METHOD: Google Apps Script Webhook */}
+              <div className="p-4 rounded-xl border border-accent-cyan/40 bg-accent-cyan/[0.04] space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="block text-[11px] font-mono font-bold uppercase text-accent-cyan">
+                    ⭐ Google Apps Script Webhook URL (Port 443 HTTPS - Sends to ANY Email)
+                  </label>
+                  <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                    Recommended for Pitch Demo
+                  </span>
+                </div>
+                <input
+                  type="url"
+                  value={googleWebhookUrl}
+                  onChange={(e) => setGoogleWebhookUrl(e.target.value)}
+                  placeholder="https://script.google.com/macros/s/AKfycb.../exec"
+                  className="w-full bg-surface-container border border-accent-cyan/50 focus:border-accent-cyan rounded-lg px-3 py-2.5 text-xs text-white font-mono placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-accent-cyan"
+                />
+                <p className="text-[10px] font-mono text-gray-400">
+                  Allows instant alert dispatch to any citizen or judge email inbox without Resend sandbox restrictions or SMTP port blocks.
+                </p>
+              </div>
+
+              {/* SECONDARY METHODS: Resend API & Direct SMTP */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[11px] font-mono uppercase text-gray-400 mb-1">
-                    Resend API Key (Port 443 HTTPS)
+                    Resend API Key (Port 443 HTTPS Fallback)
                   </label>
                   <input
                     type="password"
                     value={resendApiKey}
                     onChange={(e) => setResendApiKey(e.target.value)}
-                    placeholder="re_xxxxxxxxxxxx (Set via Render Environment)"
+                    placeholder="re_xxxxxxxxxxxx (Optional / Set via Render)"
                     className="w-full bg-surface-container border border-white/[0.14] rounded-lg px-3 py-2 text-xs text-white font-mono"
                   />
+                  <span className="text-[10px] text-gray-500 font-mono block mt-1">
+                    Free tier auto-relays testing alerts to verified account inbox.
+                  </span>
                 </div>
 
                 <div>
@@ -549,16 +630,29 @@ export default function SettingsPage() {
                       className="w-20 bg-surface-container border border-white/[0.14] rounded-lg px-3 py-2 text-xs text-white font-mono"
                     />
                   </div>
+                  <span className="text-[10px] text-gray-500 font-mono block mt-1">
+                    Standard local SMTP. Cloud hosts block ports 25/465/587.
+                  </span>
                 </div>
               </div>
 
-              <div className="flex justify-end">
+              <div className="flex justify-end pt-2">
                 <button
                   type="submit"
                   disabled={savingAdminConfig}
-                  className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold font-mono transition-all cursor-pointer"
+                  className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold font-mono transition-all cursor-pointer shadow-lg shadow-emerald-950/40 flex items-center gap-2"
                 >
-                  {savingAdminConfig ? 'Saving Server Config...' : 'Save Server Settings'}
+                  {savingAdminConfig ? (
+                    <>
+                      <Loader2 size={14} className="animate-spin" />
+                      Saving Server Config...
+                    </>
+                  ) : (
+                    <>
+                      <Check size={14} />
+                      Save Server Settings
+                    </>
+                  )}
                 </button>
               </div>
             </form>

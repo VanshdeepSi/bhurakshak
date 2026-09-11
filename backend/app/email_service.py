@@ -97,7 +97,36 @@ Direct Citizen Alert Mesh
 """
 
     # -------------------------------------------------------------------------
-    # METHOD 1: Resend HTTP REST API (Port 443 HTTPS - Standard on Render & Vercel)
+    # METHOD 1: Google Apps Script Webhook Relay (Port 443 HTTPS - Priority direct delivery to ANY recipient)
+    # -------------------------------------------------------------------------
+    if webhook_url:
+        try:
+            res = requests.post(
+                webhook_url,
+                json={
+                    "to": to_email,
+                    "recipient_name": recipient_name,
+                    "subject": subject,
+                    "html": html_body,
+                    "plain": plain_text,
+                    "district": district
+                },
+                timeout=12
+            )
+            if res.status_code == 200:
+                return {
+                    "success": True,
+                    "real_sent": True,
+                    "status": "DELIVERED",
+                    "relay_type": "GOOGLE_WEBHOOK_HTTPS",
+                    "message": f"Real email dispatched from personal Gmail via HTTPS Webhook Relay.",
+                    "recipient": to_email
+                }
+        except Exception as e:
+            print(f"[WEBHOOK EXCEPTION] {e}")
+
+    # -------------------------------------------------------------------------
+    # METHOD 2: Resend HTTP REST API (Port 443 HTTPS - Standard on Render & Vercel)
     # -------------------------------------------------------------------------
     if resend_key:
         try:
@@ -209,35 +238,6 @@ Direct Citizen Alert Mesh
                 "message": f"Resend Connection Error: {str(e)}",
                 "recipient": to_email
             }
-
-    # -------------------------------------------------------------------------
-    # METHOD 2: Google Apps Script Webhook Relay (Port 443 HTTPS)
-    # -------------------------------------------------------------------------
-    if webhook_url:
-        try:
-            res = requests.post(
-                webhook_url,
-                json={
-                    "to": to_email,
-                    "recipient_name": recipient_name,
-                    "subject": subject,
-                    "html": html_body,
-                    "plain": plain_text,
-                    "district": district
-                },
-                timeout=12
-            )
-            if res.status_code == 200:
-                return {
-                    "success": True,
-                    "real_sent": True,
-                    "status": "DELIVERED",
-                    "relay_type": "GOOGLE_WEBHOOK_HTTPS",
-                    "message": f"Real email dispatched from personal Gmail via HTTPS Webhook Relay.",
-                    "recipient": to_email
-                }
-        except Exception as e:
-            print(f"[WEBHOOK EXCEPTION] {e}")
 
     # -------------------------------------------------------------------------
     # METHOD 3: Brevo HTTP REST API (Port 443 HTTPS)

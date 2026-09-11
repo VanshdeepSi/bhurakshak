@@ -613,13 +613,16 @@ class UpdateSubscriptionRequest(BaseModel):
     notify_email: Optional[int] = 1
 
 class SmtpConfigRequest(BaseModel):
-    smtp_host: str = "smtp.gmail.com"
-    smtp_port: int = 587
-    smtp_user: str
-    smtp_password: str
+    smtp_host: Optional[str] = "smtp.gmail.com"
+    smtp_port: Optional[int] = 587
+    smtp_user: Optional[str] = ""
+    smtp_password: Optional[str] = ""
     smtp_from_name: Optional[str] = "NDMA BhuRakshak Automated Mesh"
     smtp_from_email: Optional[str] = None
     test_recipient: Optional[str] = None
+    resend_api_key: Optional[str] = None
+    google_webhook_url: Optional[str] = None
+    brevo_api_key: Optional[str] = None
 
 class SendAlertEmailRequest(BaseModel):
     email: str
@@ -915,12 +918,14 @@ def update_user_subscription(req: UpdateSubscriptionRequest, db: Session = Depen
 def get_smtp_settings():
     config = get_smtp_config()
     return {
-        "configured": bool(config.get("smtp_user") and config.get("smtp_password")),
+        "configured": bool(config.get("smtp_user") and config.get("smtp_password")) or bool(config.get("google_webhook_url")) or bool(config.get("resend_api_key")),
         "smtp_host": config.get("smtp_host", "smtp.gmail.com"),
         "smtp_port": config.get("smtp_port", 587),
         "smtp_user": config.get("smtp_user", ""),
         "smtp_from_name": config.get("smtp_from_name", "NDMA BhuRakshak Automated Mesh"),
-        "has_password": bool(config.get("smtp_password"))
+        "has_password": bool(config.get("smtp_password")),
+        "google_webhook_url": config.get("google_webhook_url", ""),
+        "has_resend": bool(config.get("resend_api_key"))
     }
 
 @app.post("/api/settings/smtp")
@@ -934,6 +939,12 @@ def update_smtp_settings(req: SmtpConfigRequest):
     }
     if req.smtp_password and req.smtp_password.strip():
         update_data["smtp_password"] = req.smtp_password.strip()
+    if req.google_webhook_url is not None:
+        update_data["google_webhook_url"] = req.google_webhook_url.strip()
+    if req.resend_api_key is not None:
+        update_data["resend_api_key"] = req.resend_api_key.strip()
+    if req.brevo_api_key is not None:
+        update_data["brevo_api_key"] = req.brevo_api_key.strip()
         
     res = save_smtp_config(update_data)
     
