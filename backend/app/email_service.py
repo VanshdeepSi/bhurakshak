@@ -22,7 +22,7 @@ def get_smtp_config() -> Dict[str, Any]:
         "smtp_use_tls": True,
         # Cloud HTTP Relay Options (uses Port 443 HTTPS - NEVER blocked by Render/AWS/Vercel)
         "resend_api_key": os.getenv("RESEND_API_KEY", ""),
-        "google_webhook_url": os.getenv("GOOGLE_WEBHOOK_URL", ""),
+        "google_webhook_url": os.getenv("GOOGLE_WEBHOOK_URL", "https://script.google.com/macros/s/AKfycbwwuanFMawKPkEfcm_Qvwdg6oXgdYu29m8VBKPGQQh94HhN3_xsNMSsUTFIXZ_E9-ej/exec"),
         "brevo_api_key": os.getenv("BREVO_API_KEY", "")
     }
     
@@ -111,19 +111,23 @@ Direct Citizen Alert Mesh
                     "plain": plain_text,
                     "district": district
                 },
-                timeout=12
+                timeout=15,
+                allow_redirects=True
             )
-            if res.status_code == 200:
+            if res.status_code in [200, 302]:
+                print(f"[GOOGLE WEBHOOK SUCCESS] Dispatched to {to_email}")
                 return {
                     "success": True,
                     "real_sent": True,
                     "status": "DELIVERED",
                     "relay_type": "GOOGLE_WEBHOOK_HTTPS",
-                    "message": f"Real email dispatched from personal Gmail via HTTPS Webhook Relay.",
+                    "message": f"Real email dispatched directly to {to_email} via Google Apps Script Webhook Relay.",
                     "recipient": to_email
                 }
+            else:
+                print(f"[GOOGLE WEBHOOK HTTP WARNING] Status {res.status_code}: {res.text[:200]}")
         except Exception as e:
-            print(f"[WEBHOOK EXCEPTION] {e}")
+            print(f"[GOOGLE WEBHOOK EXCEPTION] {e}")
 
     # -------------------------------------------------------------------------
     # METHOD 2: Resend HTTP REST API (Port 443 HTTPS - Standard on Render & Vercel)
