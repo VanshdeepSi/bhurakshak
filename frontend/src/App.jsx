@@ -11,6 +11,8 @@ import ModelXAIInsights from './pages/ModelXAIInsights';
 import SystemHealthMLOps from './pages/SystemHealthMLOps';
 import CitizenPublicView from './pages/CitizenPublicView';
 import SettingsPage from './pages/SettingsPage';
+import NotFoundPage from './pages/NotFoundPage';
+import Breadcrumbs from './components/Breadcrumbs';
 import { ThemeProvider } from './context/ThemeContext';
 import { AlertProvider } from './context/AlertContext';
 import 'leaflet/dist/leaflet.css';
@@ -28,6 +30,7 @@ export default function App() {
               <BackendWarmingBanner />
               <TopBar />
               <div className="flex-1 flex flex-col overflow-y-auto w-full h-full relative pb-16 md:pb-0">
+                <Breadcrumbs />
                 <Routes>
                   <Route path="/" element={<MainDashboard />} />
                   <Route path="/alerts" element={<AlertsCenter />} />
@@ -37,6 +40,7 @@ export default function App() {
                   <Route path="/xai" element={<ModelXAIInsights />} />
                   <Route path="/public" element={<CitizenPublicView />} />
                   <Route path="/settings" element={<SettingsPage />} />
+                  <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </div>
             </div>

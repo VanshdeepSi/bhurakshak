@@ -1,0 +1,28 @@
+# BhuRakshak — Autonomous Landslide Early Warning System
+
+> AI-powered landslide prediction and citizen alert platform for India's Northeast
+
+## Overview
+BhuRakshak is a real-time geological hazard monitoring system that combines
+machine learning (XGBoost/LightGBM ensemble), geotechnical sensor telemetry,
+and automated NDMA-protocol citizen alert dispatch to predict and warn about
+landslide events in India's Northeastern states (Sikkim, West Bengal,
+Meghalaya, Mizoram, Arunachal Pradesh).
+
+## Key Features
+- Real-time district-level landslide probability estimation
+- Factor of Safety (FoS) computation from soil, rainfall, and slope data
+- Self-training ML model with automated performance ledger
+- Multi-channel email alert dispatch (Google Webhook, Resend, SMTP)
+- Citizen registration and subscription system
+- Explainable AI (XAI) with SHAP feature importance
+- Interactive GeoJSON hazard map with Leaflet
+
+## Tech Stack
+- Frontend: React 19, Vite, Tailwind CSS 4, Leaflet
+- Backend: FastAPI (Python), SQLAlchemy, SQLite
+- ML: XGBoost, LightGBM, scikit-learn
+- Deployment: Vercel (frontend), Render (backend)
+
+## Contact
+BhuRakshak Research Team — SIH 2026

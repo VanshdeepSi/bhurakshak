@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom';
 import { Mail, AlertTriangle, X, Printer, Shield, CheckCircle2, Settings, ExternalLink } from 'lucide-react';
 
 export default function EmergencyEmailModal({ emailData, onClose }) {
-  if (!emailData) return null;
-
   // Keyboard Escape listener to cross/dismiss modal
   useEffect(() => {
+    if (!emailData) return;
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         if (onClose) onClose();
@@ -14,7 +13,9 @@ export default function EmergencyEmailModal({ emailData, onClose }) {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  }, [emailData, onClose]);
+
+  if (!emailData) return null;
 
   const isRealDelivery = emailData.real_sent || emailData.status === 'DELIVERED';
   const isUnconfigured = emailData.status === 'UNCONFIGURED';

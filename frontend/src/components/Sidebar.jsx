@@ -37,7 +37,7 @@ export default function Sidebar() {
               className={({ isActive }) =>
                 `relative p-3 rounded-xl transition-all duration-300 ease-out flex items-center justify-center ${
                   isActive && !isDistrictPage
-                    ? 'text-emerald-300 bg-emerald-500/20 shadow-[0_0_24px_rgba(16,185,129,0.85)] ring-1 ring-emerald-400/80 scale-110 border border-emerald-400/50'
+                    ? 'text-emerald-300 bg-emerald-500/20 shadow-[0_0_8px_rgba(16,185,129,0.25)] ring-1 ring-emerald-400/40 border border-emerald-400/30'
                     : 'text-on-surface-variant hover:text-emerald-400 hover:bg-white/[0.06] hover:shadow-[0_0_12px_rgba(16,185,129,0.25)]'
                 }`
               }
@@ -45,12 +45,12 @@ export default function Sidebar() {
               {({ isActive }) => (
                 <>
                   {isActive && !isDistrictPage && (
-                    <span className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-1.5 h-7 rounded-r-full bg-emerald-400 shadow-[0_0_14px_#34d399] animate-pulse"></span>
+                    <span className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-1.5 h-7 rounded-r-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></span>
                   )}
                   <Icon
                     size={24}
                     className={`transition-all duration-300 ${
-                      isActive && !isDistrictPage ? 'drop-shadow-[0_0_10px_rgba(52,211,153,0.9)] stroke-[2.4]' : 'stroke-[1.8]'
+                      isActive && !isDistrictPage ? 'drop-shadow-[0_0_4px_rgba(52,211,153,0.5)] stroke-[2.2]' : 'stroke-[1.8]'
                     }`}
                   />
                 </>
@@ -63,10 +63,10 @@ export default function Sidebar() {
             <NavLink
               to={location.pathname}
               title={`District Sector: ${districtName}`}
-              className="relative p-3 rounded-xl transition-all duration-300 ease-out flex items-center justify-center text-emerald-300 bg-emerald-500/20 shadow-[0_0_24px_rgba(16,185,129,0.85)] ring-1 ring-emerald-400/80 scale-110 border border-emerald-400/50 mt-1"
+              className="relative p-3 rounded-xl transition-all duration-300 ease-out flex items-center justify-center text-emerald-300 bg-emerald-500/20 shadow-[0_0_8px_rgba(16,185,129,0.25)] ring-1 ring-emerald-400/40 border border-emerald-400/30 mt-1"
             >
-              <span className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-1.5 h-7 rounded-r-full bg-emerald-400 shadow-[0_0_14px_#34d399] animate-pulse"></span>
-              <FileText size={24} className="drop-shadow-[0_0_10px_rgba(52,211,153,0.9)] stroke-[2.4]" />
+              <span className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-1.5 h-7 rounded-r-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></span>
+              <FileText size={24} className="drop-shadow-[0_0_4px_rgba(52,211,153,0.5)] stroke-[2.2]" />
             </NavLink>
           )}
         </div>
@@ -78,7 +78,7 @@ export default function Sidebar() {
           className={({ isActive }) =>
             `relative p-3 rounded-xl transition-all duration-300 ease-out mt-auto ${
               isActive
-                ? 'text-emerald-300 bg-emerald-500/20 shadow-[0_0_24px_rgba(16,185,129,0.85)] ring-1 ring-emerald-400/80 scale-110 border border-emerald-400/50'
+                ? 'text-emerald-300 bg-emerald-500/20 shadow-[0_0_8px_rgba(16,185,129,0.25)] ring-1 ring-emerald-400/40 border border-emerald-400/30'
                 : 'text-on-surface-variant hover:text-emerald-400 hover:bg-white/[0.06]'
             }`
           }
@@ -86,12 +86,12 @@ export default function Sidebar() {
           {({ isActive }) => (
             <>
               {isActive && (
-                <span className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-1.5 h-7 rounded-r-full bg-emerald-400 shadow-[0_0_14px_#34d399] animate-pulse"></span>
+                <span className="absolute -left-3.5 top-1/2 -translate-y-1/2 w-1.5 h-7 rounded-r-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></span>
               )}
               <Settings
                 size={22}
                 className={`transition-all duration-300 ${
-                  isActive ? 'drop-shadow-[0_0_10px_rgba(52,211,153,0.9)] stroke-[2.4]' : 'stroke-[1.8]'
+                  isActive ? 'drop-shadow-[0_0_4px_rgba(52,211,153,0.5)] stroke-[2.2]' : 'stroke-[1.8]'
                 }`}
               />
             </>
@@ -128,12 +128,12 @@ export default function Sidebar() {
                     size={20}
                     className={`transition-transform duration-200 ${
                       isActive
-                        ? 'stroke-[2.4] text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)] scale-110'
+                        ? 'stroke-[2.4] text-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.4)]'
                         : 'stroke-[1.8]'
                     }`}
                   />
                   {isActive && (
-                    <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399] animate-pulse"></span>
+                    <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_4px_#34d399]"></span>
                   )}
                 </div>
                 <span className="text-[10px] font-mono tracking-tight mt-1 leading-none">

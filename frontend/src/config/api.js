@@ -25,6 +25,6 @@ if (typeof window !== 'undefined') {
   setTimeout(() => {
     try {
       fetch(`${API_BASE}/alerts`, { method: 'GET', keepalive: true }).catch(() => {});
-    } catch (_) {}
+    } catch {}
   }, 100);
 }

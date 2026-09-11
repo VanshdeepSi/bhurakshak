@@ -16,18 +16,10 @@ export default function DirectDangerAlertModal({
   deliveryStatus, 
   onEmailDispatched 
 }) {
-  if (!alertData) return null;
-
   const [customEmail, setCustomEmail] = useState(user?.email || '');
   const [dispatching, setDispatching] = useState(false);
   const [localDelivery, setLocalDelivery] = useState(deliveryStatus || null);
   const [isMuted, setIsMuted] = useState(false);
-
-  const district = alertData.district || user?.district || 'Darjeeling';
-  const state = alertData.state || 'West Bengal';
-  const probability = alertData.probability ? Math.round(alertData.probability * 100) : 94;
-  const rainfall = alertData.rainfall_72h || 242.6;
-  const fos = alertData.factor_of_safety || 0.84;
 
   const handleDismiss = () => {
     emergencyAudio.stop();
@@ -36,6 +28,7 @@ export default function DirectDangerAlertModal({
 
   // Keyboard Escape listener to cross and dismiss alert popup
   useEffect(() => {
+    if (!alertData) return;
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         handleDismiss();
@@ -46,7 +39,15 @@ export default function DirectDangerAlertModal({
       window.removeEventListener('keydown', handleKeyDown);
       emergencyAudio.stop();
     };
-  }, []);
+  }, [alertData]);
+
+  if (!alertData) return null;
+
+  const district = alertData.district || user?.district || 'Darjeeling';
+  const state = alertData.state || 'West Bengal';
+  const probability = alertData.probability ? Math.round(alertData.probability * 100) : 94;
+  const rainfall = alertData.rainfall_72h || 242.6;
+  const fos = alertData.factor_of_safety || 0.84;
 
   const handleToggleSound = () => {
     if (isMuted) {

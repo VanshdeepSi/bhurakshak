@@ -1,4 +1,5 @@
 import { API_BASE } from '../config/api';
+import usePageMeta from '../utils/usePageMeta';
 import React, { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import axios from 'axios';
@@ -127,6 +128,8 @@ const DEFAULT_ALERTS = [
 ];
 
 export default function MainDashboard() {
+  usePageMeta(`Live Landslide Risk Map — BhuRakshak`, `Real-time interactive landslide risk map for India's Northeast with district-level probability analysis and geological hazard zones.`);
+
   const [districtsData, setDistrictsData] = useState(DEFAULT_DISTRICTS);
   const [alertsData, setAlertsData] = useState(DEFAULT_ALERTS);
   const [geoJsonData, setGeoJsonData] = useState(null);
@@ -461,11 +464,12 @@ export default function MainDashboard() {
         {/* Top Status Bar indicator (Desktop / Tablet) */}
         <div className="hidden sm:flex absolute top-4 left-4 z-[1000] bg-[#121815]/90 backdrop-blur-md rounded-xl shadow-2xl border border-white/[0.1] px-3.5 py-2 items-center space-x-2.5">
           <div className={`w-2.5 h-2.5 rounded-full ${systemStatus.status.includes('Evaluating') ? 'bg-orange-500 animate-ping' : 'bg-emerald-400'}`}></div>
-          <span className="text-gray-200 font-mono text-xs font-semibold uppercase tracking-wider">{systemStatus.status}</span>
+          <h1 className="text-gray-200 font-mono text-xs font-semibold uppercase tracking-wider m-0 p-0">{systemStatus.status}</h1>
         </div>
 
         {/* Mobile Mini Status Pill (Stacked below mobile search bar) */}
-        <div className="sm:hidden absolute top-14 left-3 z-[1000] bg-[#121815]/90 backdrop-blur-md rounded-lg border border-white/[0.1] px-2.5 py-1 flex items-center gap-2 shadow-lg">
+        <div className={`sm:hidden absolute top-14 left-3 z-[1000] bg-[#121815]/90 backdrop-blur-md rounded-lg border border-white/[0.1] px-2.5 py-1 flex items-center gap-2 shadow-lg transition-all duration-200 ${isDropdownOpen ? "opacity-0 pointer-events-none -translate-y-2" : "opacity-100"}`}>
+
           <div className={`w-2 h-2 rounded-full ${systemStatus.status.includes('Evaluating') ? 'bg-orange-500 animate-ping' : 'bg-emerald-400'}`}></div>
           <span className="text-gray-200 font-mono text-[10px] font-semibold uppercase tracking-wider">
             {systemStatus.status.includes('Evaluating') ? 'Evaluating...' : 'Live Hazard Active'}

@@ -29,7 +29,7 @@ export default function BackendWarmingBanner() {
             if (isMounted) setStatus('dismissed');
           }, 4000);
         }
-      } catch (err) {
+      } catch {
         if (isMounted && status !== 'dismissed') {
           setStatus('warming');
           setTimeout(checkBackend, 4000);

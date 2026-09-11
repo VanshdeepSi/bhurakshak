@@ -1,5 +1,7 @@
 import { API_BASE } from '../config/api';
+import usePageMeta from '../utils/usePageMeta';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAlert } from '../context/AlertContext';
 import axios from 'axios';
 import { Radio, AlertTriangle, Bell, X, CheckCircle2, RefreshCw, Layers, ChevronRight, FilterX, Activity, ShieldAlert } from 'lucide-react';
@@ -17,6 +19,8 @@ const JURISDICTIONS = [
 ];
 
 export default function AlertsCenter() {
+  usePageMeta(`Active Alerts`, `Live emergency alerts, evacuation advisories, and citizen alert dispatch center for landslide-prone districts.`);
+
   const { triggerDirectAlert } = useAlert();
   const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -161,12 +165,12 @@ export default function AlertsCenter() {
             </div>
 
             <div className="flex items-center gap-2 pl-2">
-              <a href="/mlops" title="MLOps Dashboard" className="px-2.5 py-1 text-xs font-mono bg-white/[0.05] hover:bg-white/[0.1] text-gray-300 rounded border border-white/[0.08] transition-colors">
+              <Link to="/mlops" title="MLOps Dashboard" className="px-2.5 py-1 text-xs font-mono bg-white/[0.05] hover:bg-white/[0.1] text-gray-300 rounded border border-white/[0.08] transition-colors no-underline">
                 MLOps
-              </a>
-              <a href="/" title="Risk GIS Map" className="px-2.5 py-1 text-xs font-mono bg-white/[0.05] hover:bg-white/[0.1] text-gray-300 rounded border border-white/[0.08] transition-colors">
+              </Link>
+              <Link to="/" title="Risk GIS Map" className="px-2.5 py-1 text-xs font-mono bg-white/[0.05] hover:bg-white/[0.1] text-gray-300 rounded border border-white/[0.08] transition-colors no-underline">
                 GIS Map
-              </a>
+              </Link>
             </div>
           </div>
         </div>

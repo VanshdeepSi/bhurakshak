@@ -1,4 +1,4 @@
-﻿export const NE_DISTRICT_COORDS = [
+export const NE_DISTRICT_COORDS = [
   { name: 'Darjeeling', state: 'West Bengal', lat: 27.04, lon: 88.26 },
   { name: 'Kalimpong', state: 'West Bengal', lat: 27.06, lon: 88.47 },
   { name: 'Mangan', state: 'Sikkim', lat: 27.51, lon: 88.53 },

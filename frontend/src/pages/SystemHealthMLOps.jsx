@@ -1,4 +1,5 @@
 import { API_BASE } from '../config/api';
+import usePageMeta from '../utils/usePageMeta';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from "react-hot-toast";
@@ -114,6 +115,8 @@ const DEFAULT_LEDGER = {
 };
 
 export default function SystemHealthMLOps() {
+  usePageMeta(`MLOps & System Health`, `Machine learning model performance, self-training pipeline status, and system health monitoring dashboard.`);
+
   const [retraining, setRetraining] = useState(false);
   const [health, setHealth] = useState(DEFAULT_HEALTH);
   const [ledgerData, setLedgerData] = useState(DEFAULT_LEDGER);
@@ -503,9 +506,9 @@ export default function SystemHealthMLOps() {
                       {ledgerList.length} ARCHITECTURES
                     </span>
                   </div>
-                  <h2 className="font-headline-lg text-headline-lg text-on-surface font-semibold">
+                  <h1 className="font-headline-lg text-headline-lg text-on-surface font-semibold">
                     Continuous Model Performance Ledger
-                  </h2>
+                  </h1>
                 </div>
                 <div className="font-telemetry-unit text-telemetry-unit text-on-surface-variant flex items-center gap-2">
                   <ShieldCheck size={16} className="text-emerald-400" />

@@ -1,7 +1,10 @@
 
+import usePageMeta from '../utils/usePageMeta';
 import React from 'react';
 
 export default function ModelXAIInsights() {
+  usePageMeta(`XAI Model Insights`, `Explainable AI insights with SHAP feature importance and model prediction transparency for landslide risk assessment.`);
+
   return (
     <div className="w-full min-h-full flex flex-col justify-between bg-background">
       <main className="flex-1 w-full">

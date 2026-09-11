@@ -114,7 +114,7 @@ export default function GoogleAuthModal({ onClose, onAuthSuccess }) {
     if (window.google?.accounts?.id) {
       try {
         window.google.accounts.id.prompt();
-      } catch (_) {}
+      } catch {}
     }
   };
 

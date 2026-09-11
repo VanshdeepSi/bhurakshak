@@ -1,4 +1,5 @@
-﻿import React, { useState, useEffect } from 'react';
+import usePageMeta from '../utils/usePageMeta';
+import React, { useState, useEffect } from 'react';
 import { useAlert } from '../context/AlertContext';
 import { useParams, Link } from 'react-router-dom';
 import { 
@@ -112,6 +113,7 @@ const DISTRICT_PROFILES = {
 
 export default function DistrictDetailRiskReport() {
   const { name } = useParams();
+  usePageMeta(`District: ${name}`, `Detailed landslide risk report and geotechnical analysis for ${name} district.`);
   const rawName = name ? decodeURIComponent(name) : 'Darjeeling';
   const cleanKey = rawName.toLowerCase();
   

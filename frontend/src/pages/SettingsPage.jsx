@@ -1,3 +1,4 @@
+import usePageMeta from '../utils/usePageMeta';
 import React, { useState, useEffect } from 'react';
 import { 
   Settings, Moon, Sun, Shield, MapPin, Compass, Bell, Volume2, 
@@ -14,6 +15,8 @@ import { emergencyAudio } from '../utils/emergencyAudio';
 import { API_BASE } from '../config/api';
 
 export default function SettingsPage() {
+  usePageMeta(`Settings`, `Observatory configuration, theme preferences, and user alert subscription management.`);
+
   const { theme, setTheme } = useTheme();
   const { triggerDirectAlert } = useAlert();
   

@@ -67,11 +67,11 @@ class EmergencyAudioManager {
   stop() {
     try {
       this.activeOscillators.forEach(osc => {
-        try { osc.stop(); } catch (_) {}
+        try { osc.stop(); } catch {}
       });
       this.activeOscillators = [];
       this.isPlaying = false;
-    } catch (_) {}
+    } catch {}
   }
 }
 

@@ -199,7 +199,7 @@ export default function TopBar() {
 
         {/* Center: Red Alert Evacuation Banner if User is in Red Zone */}
         {user && isRedAlert && !topBannerDismissed && (
-          <div className="hidden md:flex items-center gap-3 bg-red-950/60 border border-red-500/50 px-4 py-2 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.25)] animate-pulse">
+          <div className="hidden md:flex items-center gap-3 bg-red-950/60 border border-red-500/50 px-4 py-2 rounded-xl shadow-[0_0_8px_rgba(239,68,68,0.15)]">
             <AlertTriangle size={18} className="text-red-400 shrink-0" />
             <div className="text-xs text-red-200">
               <span className="font-bold text-red-400">RED ALERT: </span>
@@ -231,7 +231,7 @@ export default function TopBar() {
           {/* PROMINENT DIRECT "TEST RED ALERT" BUTTON */}
           <button
             onClick={handleTriggerTestAlert}
-            className="px-2 sm:px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-xl text-[11px] sm:text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-1 sm:gap-1.5 shadow-[0_0_18px_rgba(239,68,68,0.6)] border border-red-400/60 active:scale-95 transition-all animate-pulse cursor-pointer shrink-0"
+            className="px-2 sm:px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white rounded-xl text-[11px] sm:text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-1 sm:gap-1.5 shadow-[0_0_6px_rgba(239,68,68,0.25)] border border-red-400/40 active:scale-95 transition-all cursor-pointer shrink-0"
             title="Click to directly trigger emergency siren, screen alert overlay, and real email dispatch"
           >
             <Flame size={13} className="text-yellow-300 shrink-0" />
@@ -244,7 +244,7 @@ export default function TopBar() {
             onClick={handleTopGpsDetect}
             disabled={locating}
             title="Detect My Live Device Location"
-            className="p-1.5 sm:p-2 text-on-surface-variant hover:text-emerald-400 bg-surface-container hover:bg-surface-container-high rounded-xl border border-white/[0.06] transition-all flex items-center gap-1.5 active:scale-95 text-xs font-mono cursor-pointer shrink-0"
+            className="hidden sm:flex p-1.5 sm:p-2 text-on-surface-variant hover:text-emerald-400 bg-surface-container hover:bg-surface-container-high rounded-xl border border-white/[0.06] transition-all items-center gap-1.5 active:scale-95 text-xs font-mono cursor-pointer shrink-0"
           >
             <Compass size={16} className={locating ? 'animate-spin text-emerald-400' : 'text-emerald-400'} />
             <span className="hidden lg:inline">{locating ? 'Locating...' : 'GPS Geofence'}</span>

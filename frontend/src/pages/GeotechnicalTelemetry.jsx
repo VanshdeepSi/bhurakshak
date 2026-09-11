@@ -1,4 +1,5 @@
 import { API_BASE } from '../config/api';
+import usePageMeta from '../utils/usePageMeta';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Activity, Layers, ActivitySquare, Map as MapIcon } from 'lucide-react';
@@ -16,6 +17,8 @@ const DEFAULT_TELEMETRY = {
 };
 
 export default function GeotechnicalTelemetry() {
+  usePageMeta(`Sensor Telemetry`, `Real-time geotechnical sensor data including pore-water pressure, soil moisture, rainfall, and slope displacement readings.`);
+
   const [telemetry, setTelemetry] = useState(DEFAULT_TELEMETRY);
   const [loading, setLoading] = useState(false);
 

@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 @config "../tailwind.config.js";
 
 @layer base {
@@ -105,4 +105,110 @@ html.tactical .bg-surface-container-lowest {
 html.tactical .bg-surface-container-low {
   background-color: #09120c !important;
   border-color: #064e3b !important;
+}
+
+/* ================================================ */
+/* COMPREHENSIVE LIGHT MODE TEXT & BG FIXES         */
+/* ================================================ */
+
+/* Gray text that fades on white backgrounds */
+html.light .text-gray-300 { color: #334155 !important; }
+html.light .text-gray-400 { color: #475569 !important; }
+html.light .text-gray-500 { color: #64748b !important; }
+html.light .text-gray-600 { color: #475569 !important; }
+
+/* White text in cards/modals */
+html.light .text-white { color: #0f172a !important; }
+html.light .text-gray-100 { color: #1e293b !important; }
+html.light .text-gray-200 { color: #334155 !important; }
+
+/* Emerald accents need darker shade in light mode */
+html.light .text-emerald-300,
+html.light .text-emerald-400 { color: #059669 !important; }
+
+html.light .text-emerald-200 { color: #047857 !important; }
+
+/* Red alert text */
+html.light .text-red-200 { color: #991b1b !important; }
+html.light .text-red-300 { color: #b91c1c !important; }
+html.light .text-red-400 { color: #dc2626 !important; }
+
+/* Amber/Yellow text */
+html.light .text-amber-300 { color: #b45309 !important; }
+html.light .text-amber-400 { color: #d97706 !important; }
+
+/* Cyan accent text */
+html.light .text-accent-cyan { color: #0e7490 !important; }
+
+/* Dark backgrounds that need to be light */
+html.light .bg-black\/40,
+html.light .bg-black\/30,
+html.light .bg-black\/60,
+html.light .bg-black\/20 { background-color: rgba(241, 245, 249, 0.9) !important; }
+
+html.light .bg-\[\#101713\] { background-color: #ffffff !important; }
+html.light .bg-\[\#0c120f\] { background-color: #f8fafc !important; }
+
+/* Border fixes */
+html.light .border-white\/\[0\.1\],
+html.light .border-white\/\[0\.08\],
+html.light .border-white\/\[0\.06\],
+html.light .border-white\/\[0\.12\],
+html.light .border-white\/\[0\.14\] { border-color: #e2e8f0 !important; }
+
+/* Font-mono text that might be hard to read */
+html.light .font-mono { color: inherit; }
+
+/* Table and card specific fixes */
+html.light .bg-emerald-950\/30,
+html.light .bg-emerald-950\/40,
+html.light .bg-emerald-950\/60 { background-color: rgba(5, 150, 105, 0.08) !important; }
+
+html.light .bg-red-950\/60,
+html.light .bg-red-950\/70 { background-color: rgba(220, 38, 38, 0.08) !important; }
+
+html.light .bg-amber-950\/70 { background-color: rgba(217, 119, 6, 0.08) !important; }
+
+/* Ensure placeholder text is visible */
+html.light input::placeholder,
+html.light textarea::placeholder { color: #94a3b8 !important; }
+
+/* Mobile bottom nav in light mode */
+html.light .bg-\[\#101713\]\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
+
+html.light .shadow-\[0_-4px_25px_rgba\(0\,0\,0\,0\.5\)\] {
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Additional light mode background & text contrast fixes */
+html.light .bg-\[\#121815\],
+html.light .bg-\[\#121815\]\/90,
+html.light .bg-\[\#121815\]\/95,
+html.light .bg-\[\#141c18\],
+html.light .bg-\[\#141c18\]\/95 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+html.light .text-white\/80,
+html.light .text-white\/90 {
+  color: #0f172a !important;
+}
+
+html.light .text-white\/40,
+html.light .text-white\/50,
+html.light .text-white\/60,
+html.light .text-white\/70 {
+  color: #475569 !important;
+}
+
+/* Ensure solid action buttons maintain white text */
+html.light .bg-red-600,
+html.light .bg-red-600 *,
+html.light .bg-emerald-600,
+html.light .bg-emerald-600 *,
+html.light .bg-gradient-to-r,
+html.light .bg-gradient-to-r * {
+  color: #ffffff !important;
 }

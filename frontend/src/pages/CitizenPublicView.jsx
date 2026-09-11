@@ -1,18 +1,21 @@
 
+import usePageMeta from '../utils/usePageMeta';
 import React from 'react';
 import toast from 'react-hot-toast';
 
 export default function CitizenPublicView() {
+  usePageMeta(`Citizen Advisory`, `Public safety advisories, evacuation routes, and citizen registration for landslide early warning notifications.`);
+
   const handleFeatureClick = () => toast('Feature disabled in demo mode.', { icon: '🚧' });
 
   return (
     <>
-      <main className="flex flex-col relative w-full pt-20 pb-20 bg-surface min-h-screen"><div className="flex flex-col w-full px-space-md py-space-md gap-space-lg">
+      <main className="flex flex-col relative w-full pt-4 pb-20 bg-surface min-h-screen"><div className="flex flex-col w-full px-space-md py-space-md gap-space-lg">
 {/*  Minimal Context Sub-bar & Language Quick Toggle  */}
 <div className="flex items-center justify-between">
 <div className="flex items-center gap-space-xs">
 <span className="w-2 h-2 rounded-full bg-error animate-pulse"></span>
-<span className="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant">Citizen Advisory · Live Status</span>
+<h1 className="font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant font-bold">Citizen Advisory · Live Status</h1>
 </div>
 <div className="inline-flex rounded bg-surface-container p-0.5">
 <button onClick={handleFeatureClick} className="px-2.5 py-1 rounded font-label-caps text-label-caps bg-surface-bright text-on-surface transition-colors" id="lang-en">EN</button>

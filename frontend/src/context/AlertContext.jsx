@@ -24,7 +24,7 @@ export function AlertProvider({ children }) {
         try {
           const parsed = JSON.parse(stored);
           setCurrentUser(parsed);
-        } catch (_) {}
+        } catch {}
       } else {
         setCurrentUser(null);
       }

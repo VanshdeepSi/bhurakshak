@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 export default function BhuRakshakLogo({ size = 38, showText = true, className = '' }) {
   return (
@@ -63,7 +63,7 @@ export default function BhuRakshakLogo({ size = 38, showText = true, className =
       {showText && (
         <div className="flex flex-col min-w-0">
           <div className="flex items-center gap-1.5 sm:gap-2">
-            <span className="font-extrabold text-sm sm:text-base md:text-lg tracking-wider text-white uppercase font-display leading-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate">
+            <span className="font-extrabold text-sm sm:text-base md:text-lg tracking-wider text-on-surface uppercase font-display leading-tight drop-shadow-sm truncate">
               BHU<span className="text-emerald-400 font-black">RAKSHAK</span>
             </span>
             <span className="hidden sm:inline-block bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-mono uppercase px-1.5 py-0.5 rounded font-bold tracking-widest shrink-0">
