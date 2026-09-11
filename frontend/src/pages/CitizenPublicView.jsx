@@ -1,13 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import usePageMeta from '../utils/usePageMeta';
 import { 
   Search, X, Navigation, ShieldAlert, Info, PhoneCall, 
   Compass, BadgeCheck, Shield, Building2, AlertOctagon, 
   Headphones, Radio, ShieldCheck, ChevronDown, ChevronUp, 
-  MapPin, ExternalLink, Clock, Footprints, Mountain, CheckCircle2
+  MapPin, ExternalLink, Clock, Footprints, Mountain, CheckCircle2,
+  Users, Zap, Droplets, Stethoscope, Wifi, Bed, Phone, Check, Eye
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { requestDeviceLocation } from '../utils/geolocation';
+
+const PRIMARY_SHELTER = {
+  id: 'mangan-school',
+  name: 'Government Senior Secondary School (Upper Mangan)',
+  sector: 'Relief Sector 2 &bull; High Ground Zone',
+  badge: 'Primary Reinforced Shelter',
+  verifiedBy: 'Sikkim State Disaster Management Authority (SDMA) & NDRF Unit 4',
+  distance: '800 meters north uphill',
+  walkTime: '14 mins',
+  elevation: '2,120m AMSL (+180m above flood basin)',
+  capacity: 450,
+  occupied: 182,
+  available: 268,
+  status: 'ACTIVE & ACCEPTING CITIZENS',
+  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA4sd10E21r_9FgzUIaS8xhgPE7ccOEdgBMhhVGhOamH_w_SKftlkhsI3UqVSMoEAWR7Xq_BPh2dMF2pRA4md01rftCZv6eMgtSz7pIiwWiSkTKEuVUchd20Ks5lURqb330Aes--tzsc0qcO6j8IGOoSfkPsB2gKQgK8-zAMNQZbX4ue8JZ7EPJKCv0nloyHhOGGgUwi7tPE4VLxiwDjPmFeP6JBBBdv6iySi3FRQpk6JR6c-Acr4QF',
+  officer: 'Major R. K. Thapa (NDRF Relief Commander)',
+  phone: '1077',
+  coords: { lat: 27.514, lon: 88.532 },
+  amenities: [
+    { name: 'Filtered Clean Water', desc: '5,000L RO filtration tank running on gravity feed', icon: Droplets },
+    { name: 'Medical Emergency Post', desc: '2 doctors, 4 paramedics, and trauma supplies on-site', icon: Stethoscope },
+    { name: 'Emergency Backup Power', desc: '15 kVA Diesel Generator + solar microgrid operational', icon: Zap },
+    { name: 'Satellite Comms Link', desc: 'BSNL VSAT terminal active for family status relays', icon: Wifi },
+    { name: 'Heated Bedding Quarters', desc: 'Warm blankets, tarps, and partitioned family dorms', icon: Bed },
+    { name: 'Cooked Meals & Rations', desc: '7-day relief food stock managed by Civil Supplies', icon: Building2 },
+  ]
+};
 
 export default function CitizenPublicView() {
   usePageMeta(`Citizen Advisory`, `Public safety advisories, evacuation routes, and citizen registration for landslide early warning notifications.`);
@@ -17,6 +45,17 @@ export default function CitizenPublicView() {
   const [showRoutePanel, setShowRoutePanel] = useState(false);
   const [locating, setLocating] = useState(false);
   const [gpsLocation, setGpsLocation] = useState('Dzongu Subdivision, North Sikkim');
+  const [showShelterModal, setShowShelterModal] = useState(false);
+  const [registeredFamily, setRegisteredFamily] = useState(false);
+
+  // Close modal on Escape
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setShowShelterModal(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handleClearSearch = () => {
     setSearchQuery('');
@@ -35,6 +74,11 @@ export default function CitizenPublicView() {
     } finally {
       setLocating(false);
     }
+  };
+
+  const handleRegisterShelter = () => {
+    setRegisteredFamily(true);
+    toast.success('Shelter voucher #MNG-408 confirmed for your family!', { duration: 4000 });
   };
 
   return (
@@ -167,7 +211,7 @@ export default function CitizenPublicView() {
           </button>
         </div>
 
-        {/* Route Map View Contextual Drawer (Smoothly expand on click) */}
+        {/* Route Map View Contextual Drawer */}
         {showRoutePanel && (
           <div className="flex flex-col bg-surface-container-low border border-emerald-500/40 rounded-2xl p-5 sm:p-6 gap-4 shadow-xl animate-fade-in">
             <div className="flex items-center justify-between pb-1 border-b border-outline-variant/30">
@@ -244,23 +288,45 @@ export default function CitizenPublicView() {
           </div>
         )}
 
-        {/* Reassuring Field Imagery Card */}
-        <div className="relative w-full rounded-2xl overflow-hidden bg-surface-container-low shadow-md border border-outline-variant/40">
+        {/* CLICKABLE Reassuring Field Imagery & Shelter Readiness Card */}
+        <div 
+          onClick={() => setShowShelterModal(true)}
+          className="relative w-full rounded-2xl overflow-hidden bg-surface-container-low shadow-md border border-outline-variant/50 hover:border-emerald-500/80 hover:shadow-xl hover:shadow-emerald-950/30 transition-all duration-300 cursor-pointer group select-none"
+          title="Click to view live shelter readiness, bed availability, and medical facilities"
+        >
           <div 
-            className="bg-cover bg-center w-full h-44 sm:h-52 relative" 
-            style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuA4sd10E21r_9FgzUIaS8xhgPE7ccOEdgBMhhVGhOamH_w_SKftlkhsI3UqVSMoEAWR7Xq_BPh2dMF2pRA4md01rftCZv6eMgtSz7pIiwWiSkTKEuVUchd20Ks5lURqb330Aes--tzsc0qcO6j8IGOoSfkPsB2gKQgK8-zAMNQZbX4ue8JZ7EPJKCv0nloyHhOGGgUwi7tPE4VLxiwDjPmFeP6JBBBdv6iySi3FRQpk6JR6c-Acr4QF")' }}
+            className="bg-cover bg-center w-full h-48 sm:h-56 relative transition-transform duration-500 group-hover:scale-[1.02]" 
+            style={{ backgroundImage: `url("${PRIMARY_SHELTER.image}")` }}
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0c120f] via-[#0c120f]/50 to-transparent"></div>
-            <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <BadgeCheck size={22} className="text-emerald-400 shrink-0" />
-                <span className="font-mono text-xs sm:text-sm text-white font-bold tracking-wider uppercase drop-shadow">
-                  Reinforced High Ground Shelter (Upper Mangan)
-                </span>
-              </div> 
-              <span className="font-mono text-xs bg-black/70 backdrop-blur text-emerald-300 border border-emerald-500/40 px-3 py-1 rounded-full font-semibold">
-                Capacity: 450 &bull; 268 Available
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0c120f] via-[#0c120f]/60 to-black/30"></div>
+
+            {/* Top Interactive Banner */}
+            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-emerald-500/90 text-gray-950 shadow-lg group-hover:bg-emerald-400 group-hover:scale-105 transition-all">
+                <Eye size={14} />
+                <span>View Live Shelter Status &rarr;</span>
               </span>
+            </div>
+
+            {/* Bottom Info Bar */}
+            <div className="absolute bottom-4 left-4 right-4 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <BadgeCheck size={22} className="text-emerald-400 shrink-0 drop-shadow" />
+                  <span className="font-mono text-xs sm:text-sm text-white font-bold tracking-wider uppercase drop-shadow">
+                    {PRIMARY_SHELTER.name}
+                  </span>
+                </div>
+                <span className="text-[11px] font-mono text-emerald-300 pl-7">
+                  {PRIMARY_SHELTER.sector} &bull; {PRIMARY_SHELTER.distance}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-xs bg-black/80 backdrop-blur text-emerald-300 border border-emerald-500/50 px-3 py-1 rounded-full font-semibold shadow">
+                  Capacity: {PRIMARY_SHELTER.capacity} &bull; {PRIMARY_SHELTER.available} Available
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -336,6 +402,175 @@ export default function CitizenPublicView() {
         </div>
 
       </div>
+
+      {/* ========================================================= */}
+      {/* INTERACTIVE SHELTER INSPECTION & LIVE READINESS MODAL      */}
+      {/* ========================================================= */}
+      {showShelterModal && (
+        <div 
+          onClick={() => setShowShelterModal(false)}
+          className="fixed inset-0 z-[1200] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fade-in cursor-pointer overflow-y-auto"
+          role="dialog"
+          aria-modal="true"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-2xl bg-surface-container-low border border-emerald-500/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col my-auto cursor-default animate-scale-up"
+          >
+            {/* Modal Header with Shelter Image */}
+            <div 
+              className="relative h-44 sm:h-52 bg-cover bg-center w-full flex flex-col justify-between p-4 sm:p-5"
+              style={{ backgroundImage: `url("${PRIMARY_SHELTER.image}")` }}
+            >
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/30"></div>
+
+              {/* Close Button & Badge */}
+              <div className="relative z-10 flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500 text-gray-950">
+                  <CheckCircle2 size={13} />
+                  {PRIMARY_SHELTER.badge}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowShelterModal(false)}
+                  className="p-1.5 rounded-full bg-black/60 text-gray-300 hover:text-white hover:bg-black/80 transition-colors cursor-pointer"
+                  title="Close shelter details (Esc)"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Title & Location */}
+              <div className="relative z-10 flex flex-col">
+                <h3 className="text-lg sm:text-xl font-bold text-white leading-snug drop-shadow-md">
+                  {PRIMARY_SHELTER.name}
+                </h3>
+                <span className="text-xs font-mono text-emerald-300 flex items-center gap-1 mt-0.5">
+                  <MapPin size={12} className="text-emerald-400" />
+                  {PRIMARY_SHELTER.sector} &bull; Elevation: {PRIMARY_SHELTER.elevation}
+                </span>
+              </div>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-4 sm:p-6 flex flex-col gap-5 overflow-y-auto max-h-[calc(85vh-200px)]">
+              
+              {/* Live Occupancy Gauge */}
+              <div className="bg-surface-container p-4 rounded-xl border border-outline-variant/30 flex flex-col gap-2.5">
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-on-surface-variant flex items-center gap-1.5">
+                    <Users size={14} className="text-emerald-400" />
+                    Live Shelter Occupancy
+                  </span>
+                  <span className="font-bold text-emerald-300 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30">
+                    {PRIMARY_SHELTER.status}
+                  </span>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-3 bg-surface-container-highest rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.round((PRIMARY_SHELTER.occupied / PRIMARY_SHELTER.capacity) * 100)}%` }}
+                  ></div>
+                </div>
+
+                <div className="flex items-center justify-between text-xs font-mono pt-1 text-on-surface-variant">
+                  <span>Occupied: <strong className="text-on-surface">{PRIMARY_SHELTER.occupied}</strong> citizens</span>
+                  <span className="text-emerald-400 font-bold">{PRIMARY_SHELTER.available} Beds Available</span>
+                  <span>Max: <strong className="text-on-surface">{PRIMARY_SHELTER.capacity}</strong></span>
+                </div>
+              </div>
+
+              {/* Verified Critical Amenities Grid */}
+              <div className="flex flex-col gap-2.5">
+                <h4 className="text-xs font-mono uppercase tracking-wider text-on-surface-variant font-bold flex items-center gap-1.5">
+                  <CheckCircle2 size={14} className="text-primary" />
+                  Verified On-Site Equipment &amp; Resources
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {PRIMARY_SHELTER.amenities.map((item, idx) => {
+                    const Icon = item.icon;
+                    return (
+                      <div key={idx} className="bg-surface-container/60 p-3 rounded-xl border border-outline-variant/20 flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center shrink-0 text-emerald-400">
+                          <Icon size={16} />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                          <span className="text-xs font-bold text-on-surface leading-tight">{item.name}</span>
+                          <span className="text-[11px] text-on-surface-variant leading-tight mt-0.5">{item.desc}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Officer In Charge & Authority Clearance */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-surface-container rounded-xl border border-outline-variant/30 text-xs">
+                <div className="flex flex-col">
+                  <span className="font-mono text-[10px] text-on-surface-variant uppercase">Relief Station Commander</span>
+                  <span className="font-bold text-on-surface">{PRIMARY_SHELTER.officer}</span>
+                  <span className="text-[11px] text-on-surface-variant">{PRIMARY_SHELTER.verifiedBy}</span>
+                </div>
+                <a
+                  href={`tel:${PRIMARY_SHELTER.phone}`}
+                  className="px-3 py-1.5 bg-surface-container-high hover:bg-surface-bright text-emerald-300 rounded-lg font-mono font-semibold flex items-center gap-1.5 no-underline transition-colors w-fit"
+                >
+                  <Phone size={13} />
+                  <span>Call Desk: {PRIMARY_SHELTER.phone}</span>
+                </a>
+              </div>
+
+              {/* Family Voucher Confirmation Box */}
+              {registeredFamily && (
+                <div className="p-3 bg-emerald-950/80 border border-emerald-500/60 rounded-xl flex items-center gap-3 text-emerald-200 text-xs animate-fade-in">
+                  <CheckCircle2 size={20} className="text-emerald-400 shrink-0" />
+                  <div className="flex flex-col">
+                    <span className="font-bold">Family Voucher Reserved: #MNG-408</span>
+                    <span>Reserved for 4 family members. Show this screen to Camp Officer on arrival.</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Modal Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center gap-2.5 pt-2 border-t border-outline-variant/30">
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${PRIMARY_SHELTER.coords.lat},${PRIMARY_SHELTER.coords.lon}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:flex-1 py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold font-mono uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all no-underline"
+                >
+                  <ExternalLink size={15} />
+                  <span>GPS Directions</span>
+                </a>
+
+                {!registeredFamily ? (
+                  <button
+                    type="button"
+                    onClick={handleRegisterShelter}
+                    className="w-full sm:flex-1 py-3 px-4 bg-surface-container-high hover:bg-surface-bright text-on-surface border border-outline-variant/50 rounded-xl text-xs font-bold font-mono uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer"
+                  >
+                    <Check size={15} className="text-emerald-400" />
+                    <span>Pre-Register Family</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    className="w-full sm:flex-1 py-3 px-4 bg-emerald-950 text-emerald-300 border border-emerald-500/40 rounded-xl text-xs font-bold font-mono uppercase tracking-wider flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle2 size={15} />
+                    <span>Voucher Active</span>
+                  </button>
+                )}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
+
     </main>
   );
 }
