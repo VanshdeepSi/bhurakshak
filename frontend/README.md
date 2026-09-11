@@ -1,16 +1,19 @@
-# React + Vite
+# 🌐 BhuRakshak Frontend Web Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The mission-critical command center for the **BhuRakshak Autonomous Landslide Early Warning System**.
 
-Currently, two official plugins are available:
+## Tech Stack
+- **Framework:** React 18.3 + Vite 6 (Sub-second HMR)
+- **Styling:** Tailwind CSS (High-Contrast Tactical Dark Mode)
+- **Mapping & GIS:** Leaflet & GeoJSON Sector Overlays
+- **Audio Siren Engine:** Native HTML5 Web Audio API
+- **Visualization:** Recharts Telemetry Gauges
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Local Development
+`ash
+npm install
+npm run dev
+`
+Runs locally at http://localhost:5173.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+For complete system architecture and documentation, please visit the [Root README](../README.md).

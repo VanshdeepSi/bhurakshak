@@ -11,7 +11,7 @@ def run_step(script_name, args):
         sys.exit(1)
 
 if __name__ == "__main__":
-    BASE_DIR = r"E:\code\sih2026_landslide_ner"
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     SRC_DIR = os.path.join(BASE_DIR, "src")
     
     RAW_DATA = os.path.join(BASE_DIR, "data", "raw", "lsm_training_set.csv")

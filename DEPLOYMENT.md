@@ -1,4 +1,4 @@
-# BhuRakshak · Production Cloud Deployment Guide
+# 🚀 BhuRakshak Production Cloud Deployment Guide
 
 This guide covers deploying the **BhuRakshak Autonomous Landslide Early Warning System** to **Vercel** (Frontend) and **Render** (Backend).
 
@@ -6,12 +6,12 @@ This guide covers deploying the **BhuRakshak Autonomous Landslide Early Warning 
 
 ## Architecture Summary
 
-- **Frontend**: React 19 + Vite + Tailwind CSS (Hosted on **Vercel** for instant global edge CDN & SSL).
-- **Backend**: FastAPI + Uvicorn + SQLite + APScheduler + SMTP (Hosted on **Render** for persistent background worker & ML execution).
+- **Frontend**: React 18 + Vite 6 + Tailwind CSS (Hosted on **Vercel** for instant global edge CDN & SSL).
+- **Backend**: FastAPI + Uvicorn + SQLite/PostgreSQL + APScheduler + Resend API (Hosted on **Render** for persistent background worker & ML execution).
 
 ---
 
-## 🚀 Option 1: Vercel (Frontend) + Render (Backend) [Recommended]
+## ⚡ Option 1: Vercel (Frontend) + Render (Backend) [Recommended]
 
 ### Part A: Deploy Backend on Render (5 minutes)
 
@@ -28,8 +28,8 @@ This guide covers deploying the **BhuRakshak Autonomous Landslide Early Warning 
    - **Name**: `bhurakshak-backend`
    - **Root Directory**: `backend`
    - **Environment**: `Python 3`
-   - **Region**: Oregon (US West) or Singapore / Frankfurt
-   - **Branch**: `main` (or `master`)
+   - **Region**: Oregon (US West) or Singapore
+   - **Branch**: `main`
    - **Build Command**: `pip install -r requirements.txt`
    - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
    - **Plan**: `Free`
@@ -57,38 +57,31 @@ This guide covers deploying the **BhuRakshak Autonomous Landslide Early Warning 
 
 ---
 
-## ⚡ Option 2: All-in-One Deploy via Render Blueprint (`render.yaml`)
+## 🔄 Keeping Render Awake 24/7 (Preventing Free-Tier Cold Starts)
 
-If you want both the frontend and backend deployed under a single Render dashboard:
-
-1. Push this repository to GitHub.
-2. In Render, click **New +** > **Blueprint**.
-3. Connect your repository. Render will automatically read `render.yaml` in the root:
-   - Automatically provisions `bhurakshak-backend` (FastAPI).
-   - Automatically provisions `bhurakshak-frontend` (Static Site).
-   - Automatically binds `VITE_API_URL` between them!
-4. Click **Apply**.
+Render's free tier spins down containers after 15 minutes of inactivity. To ensure zero cold-start latency:
+1. **Automated GitHub Action (Included)**: This repository includes `.github/workflows/keep_alive.yml`, which automatically pings the backend every 10 minutes.
+2. **Optional External Monitor**: Add a free HTTP monitor at [UptimeRobot.com](https://uptimerobot.com) targeting `https://bhurakshak-backend.onrender.com/api/telemetry/live` every 5 minutes.
 
 ---
 
-## 🛠️ Option 3: Local or Docker Self-Hosting
+## 🛠️ Option 2: All-in-One Deploy via Render Blueprint (`render.yaml`)
 
-You can also run the production container anywhere using Docker:
+If you want both frontend and backend under a single Render dashboard:
+1. In Render, click **New +** > **Blueprint**.
+2. Connect your repository. Render automatically reads `render.yaml`:
+   - Provisions `bhurakshak-backend` (FastAPI).
+   - Provisions `bhurakshak-frontend` (Static Site).
+   - Automatically binds `VITE_API_URL` between them!
+3. Click **Apply**.
 
+---
+
+## 🐳 Option 3: Docker Container Deployment
+
+Run the containerized microservice anywhere using Docker:
 ```bash
 cd backend
 docker build -t bhurakshak-api .
 docker run -d -p 8000:8000 bhurakshak-api
 ```
-
----
-
-## 📧 Post-Deployment: Configure Real SMTP Alerts
-
-Once deployed:
-1. Open your live frontend on Vercel (`https://your-app.vercel.app/settings`).
-2. Scroll to the **"Real Email Dispatch Relay (SMTP)"** card.
-3. Click the **"GMAIL"** preset button.
-4. Enter your Gmail address and 16-letter **Google App Password**.
-5. Click **"Save Settings"** and **"Send Real Test Email"**.
-6. Real landslide evacuation alerts will now deliver directly to citizens' inboxes!

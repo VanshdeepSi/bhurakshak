@@ -1,9 +1,10 @@
 {
   "smtp_host": "smtp.gmail.com",
   "smtp_port": 587,
-  "smtp_user": "vanshdeepsb@gmail.com",
-  "smtp_password": "ymzf jaxh qyql kvkj",
+  "smtp_user": "alerts@bhurakshak.gov.in",
+  "smtp_password": "YOUR_SMTP_APP_PASSWORD",
   "smtp_from_name": "NDMA BhuRakshak Automated Mesh",
-  "smtp_from_email": "vanshdeepsb@gmail.com",
-  "smtp_use_tls": true
+  "smtp_from_email": "alerts@bhurakshak.gov.in",
+  "smtp_use_tls": true,
+  "resend_api_key": "YOUR_RESEND_API_KEY"
 }

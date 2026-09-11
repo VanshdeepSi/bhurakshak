@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
+import BackendWarmingBanner from './components/BackendWarmingBanner';
 import MainDashboard from './pages/MainDashboard';
 import AlertsCenter from './pages/AlertsCenter';
 import GeotechnicalTelemetry from './pages/GeotechnicalTelemetry';
@@ -24,6 +25,7 @@ export default function App() {
           <div className="flex h-screen bg-background text-on-background font-body-sm overflow-hidden">
             <Sidebar />
             <div className="flex-1 flex flex-col min-w-0">
+              <BackendWarmingBanner />
               <TopBar />
               <div className="flex-1 flex flex-col overflow-y-auto w-full h-full relative pb-16 md:pb-0">
                 <Routes>

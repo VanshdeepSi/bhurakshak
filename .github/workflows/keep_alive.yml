@@ -1,0 +1,19 @@
+name: Render Cloud Backend 24/7 Keep-Alive
+
+on:
+  schedule:
+    # Runs every 10 minutes to prevent Render Free Tier container spin-down
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    name: Ping BhuRakshak Render API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Warm-Up HTTP Ping
+        run: |
+          echo 'Pinging BhuRakshak Live Render Cloud API...'
+          curl -s -f -m 60 'https://bhurakshak-vjq5.onrender.com/api/telemetry/live' > /dev/null || true
+          curl -s -f -m 60 'https://bhurakshak-vjq5.onrender.com/api/alerts' > /dev/null || true
+          echo 'Keep-alive ping completed successfully.'

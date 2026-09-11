@@ -19,3 +19,12 @@ const getApiBase = () => {
 };
 
 export const API_BASE = getApiBase();
+
+// Proactive background warm-up ping to wake up Render Cloud container on initial client load
+if (typeof window !== 'undefined') {
+  setTimeout(() => {
+    try {
+      fetch(`${API_BASE}/alerts`, { method: 'GET', keepalive: true }).catch(() => {});
+    } catch (_) {}
+  }, 100);
+}

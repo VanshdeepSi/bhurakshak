@@ -1,15 +1,15 @@
 @echo off
 echo ========================================================
-echo   SIH26001 - Daily Autonomous Model Training Script
+echo   BHURAKSHAK - Daily Autonomous Model Training Script
 echo ========================================================
 echo.
 echo Running at %DATE% %TIME%
 echo.
 
-REM Change to project directory
-cd /d "E:\code\sih2026_landslide_ner"
+REM Change to script directory
+cd /d "%~dp0"
 
-REM Run the autotraining script (simulates ingestion and retrains)
+REM Run the autotraining pipeline
 python src\auto_train.py
 
 echo.
