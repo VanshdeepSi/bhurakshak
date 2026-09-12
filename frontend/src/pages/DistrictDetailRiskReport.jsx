@@ -564,7 +564,7 @@ const KNOWN_DISTRICT_PROFILES = {
 // Generates a fully dynamic, authentic 7-day progression history and SVG curve
 function generateProgressionData(probability, tier, districtKey) {
   const h = hashString(districtKey);
-  const pToday = Math.min(99.4, Math.max(2.0, probability));
+  const pToday = Math.min(99.4, Math.max(2.0, Number(probability) || 10.0));
   const points = [];
 
   if (tier === 4 || pToday >= 75) {
@@ -620,13 +620,13 @@ function generateProgressionData(probability, tier, districtKey) {
     return { x, y, prob: Math.round(p * 10) / 10, dayIndex: i - 6 };
   });
 
-  // Calculate smooth cubic Bezier path
+  // Calculate smooth cubic Bezier path safely
   let pathD = `M ${coords[0].x},${coords[0].y}`;
   for (let i = 0; i < coords.length - 1; i++) {
-    const p0 = coords[i > 0 ? i - 1 : i];
+    const p0 = i > 0 ? coords[i - 1] : coords[i];
     const p1 = coords[i];
     const p2 = coords[i + 1];
-    const p3 = coords[i + 2 < coords.length ? i + 2 : p2];
+    const p3 = i + 2 < coords.length ? coords[i + 2] : p2;
 
     const cp1x = Math.round((p1.x + (p2.x - p0.x) * 0.2) * 10) / 10;
     const cp1y = Math.round((p1.y + (p2.y - p0.y) * 0.2) * 10) / 10;
