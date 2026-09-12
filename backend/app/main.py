@@ -150,13 +150,12 @@ def execute_autotrain_pipeline():
         base_dir = r"E:/code/sih2026_landslide_ner"
         auto_train_script = os.path.join(base_dir, "src", "auto_train.py")
         if os.path.exists(auto_train_script):
-            print(f"[{datetime.datetime.now()}] MLOPS: Ingesting daily survey telemetry...")
-            subprocess.run(["python", auto_train_script], cwd=base_dir, capture_output=True, timeout=120)
-            
-        train_script = os.path.join(base_dir, "backend", "train_ensemble.py")
-        if os.path.exists(train_script):
-            print(f"[{datetime.datetime.now()}] MLOPS: Re-training Stacking Ensemble models...")
-            subprocess.run(["python", train_script], cwd=os.path.join(base_dir, "backend"), capture_output=True, timeout=300)
+            print(f"[{datetime.datetime.now()}] MLOPS: Ingesting 24h telemetry & executing incremental warm-start...")
+            res = subprocess.run(["python", auto_train_script], cwd=base_dir, capture_output=True, text=True, timeout=120)
+            if res.stdout:
+                print(res.stdout.strip())
+            if res.stderr:
+                print("MLOPS Notice:", res.stderr.strip())
             
         load_ml_model()
         now = datetime.datetime.now()
@@ -264,17 +263,23 @@ scheduler.add_job(
 
 def load_ml_model():
     global ML_MODEL, ML_METRICS
-    model_dir = "models"
-    model_path = os.path.join(model_dir, 'model.pkl')
-    metrics_path = os.path.join(model_dir, 'metrics.json')
-    
-    if os.path.exists(model_path) and os.path.exists(metrics_path):
-        ML_MODEL = joblib.load(model_path)
-        with open(metrics_path, 'r') as f:
-            ML_METRICS = json.load(f)
-        print(f"[{datetime.datetime.now()}] Model weights loaded into memory.")
-    else:
-        print(f"[{datetime.datetime.now()}] Warning: Model files not found in /models directory.")
+    base_dir = r"E:/code/sih2026_landslide_ner"
+    candidates = [
+        (os.path.join(base_dir, "models", "calibrated_xgboost_ner_optimized.pkl"), os.path.join(base_dir, "models", "metrics_optimized.json")),
+        (os.path.join(base_dir, "backend", "models", "model.pkl"), os.path.join(base_dir, "models", "metrics.json")),
+        ("models/model.pkl", "models/metrics.json")
+    ]
+    for m_path, meta_path in candidates:
+        if os.path.exists(m_path) and os.path.exists(meta_path):
+            try:
+                ML_MODEL = joblib.load(m_path)
+                with open(meta_path, 'r') as f:
+                    ML_METRICS = json.load(f)
+                print(f"[{datetime.datetime.now()}] Model weights hot-loaded from {os.path.basename(m_path)}.")
+                return
+            except Exception as e:
+                print(f"Warning: Failed loading {m_path}: {e}")
+    print(f"[{datetime.datetime.now()}] Warning: No valid model files found in candidates.")
 
 # Load model on startup & activate autonomous 24h scheduler
 @app.on_event("startup")
