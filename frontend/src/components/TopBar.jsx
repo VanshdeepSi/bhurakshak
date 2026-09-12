@@ -2,22 +2,20 @@ import { API_BASE } from '../config/api';
 import React, { useState, useEffect } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { 
-  User, LogOut, Mail, Bell, Shield, AlertTriangle, MapPin, 
-  ChevronDown, CheckCircle, Settings, Compass, Sun, Moon, Flame, Clock, X
+  LogOut, Mail, AlertTriangle, MapPin, 
+  ChevronDown, Settings, Compass, Flame, Clock, X
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import GoogleAuthModal from './GoogleAuthModal';
 import EmergencyEmailModal from './EmergencyEmailModal';
 import BhuRakshakLogo from './BhuRakshakLogo';
-import { useTheme } from '../context/ThemeContext';
 import { useAlert } from '../context/AlertContext';
 import { requestDeviceLocation } from '../utils/geolocation';
 
 export default function TopBar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { theme, setTheme } = useTheme();
   const { triggerDirectAlert, checkAndAlertIfDangerZone } = useAlert();
   const [time, setTime] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -250,14 +248,6 @@ export default function TopBar() {
             <span className="hidden lg:inline">{locating ? 'Locating...' : 'GPS Geofence'}</span>
           </button>
 
-          {/* Fast Theme Toggle Button (Dark / Light) */}
-          <button
-            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-            className="p-1.5 sm:p-2 text-on-surface-variant hover:text-emerald-400 bg-surface-container hover:bg-surface-container-high rounded-xl border border-white/[0.06] transition-all cursor-pointer shrink-0"
-          >
-            {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
-          </button>
 
           {/* Dynamic Clock */}
           <div className="hidden lg:flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-xl font-mono text-xs text-emerald-400 font-bold border border-white/[0.06]">
