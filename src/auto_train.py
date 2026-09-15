@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 import pandas as pd
 import joblib
-import xgboost as xgb
+from catboost import CatBoostClassifier, Pool
 
 warnings.filterwarnings('ignore')
 
@@ -18,7 +18,7 @@ DAILY_NEW_SAMPLES = 85          # Number of daily telemetry events ingested
 INCREMENTAL_TREES = 12          # New corrective trees fitted on the daily delta batch
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PATH = os.path.join(BASE_DIR, "data", "processed", "ner_model_training_ready.csv")
-MODEL_PATH = os.path.join(BASE_DIR, "models", "calibrated_xgboost_ner_optimized.pkl")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "catboost_champion.cbm")
 METRICS_PATH = os.path.join(BASE_DIR, "models", "metrics_optimized.json")
 
 FEATURE_COLUMNS = [
@@ -108,10 +108,12 @@ def apply_rolling_window_cap(master_df, max_size=MAX_WINDOW_SIZE):
 
 def execute_incremental_warm_start(new_batch_df, champion_model_path=MODEL_PATH):
     """
-    Fast XGBoost Incremental Warm-Start Training:
-    - Loads existing champion model's underlying booster.
-    - Fits 10-15 new gradient boosted trees on the incoming daily delta batch.
+    Fast CatBoost Incremental Warm-Start Training:
+    - Loads existing champion CatBoost model via init_model.
+    - Fits new corrective trees on the incoming daily delta batch.
     - Preserves all previous trees while adapting to current slope strain.
+    - CatBoost's init_model is cleaner than XGBoost's booster extraction — 
+      no need to unwrap CalibratedClassifierCV or monkey-patch internal state.
     - Finishes in < 3 seconds with ZERO cold-start latency!
     """
     if not os.path.exists(champion_model_path):
@@ -119,56 +121,44 @@ def execute_incremental_warm_start(new_batch_df, champion_model_path=MODEL_PATH)
         return False, {}
 
     start_time = time.time()
-    print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] MLOPS: Loading champion model for warm-start continuation...")
-    calibrated_model = joblib.load(champion_model_path)
+    print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] MLOPS: Loading CatBoost champion for warm-start continuation...")
     
-    # Extract underlying base XGBoost booster
-    base_xgb = calibrated_model.estimator
-    existing_booster = base_xgb.get_booster()
-    initial_rounds = existing_booster.num_boosted_rounds()
+    # Load existing champion to get tree count
+    existing_model = CatBoostClassifier()
+    existing_model.load_model(champion_model_path)
+    initial_trees = existing_model.tree_count_
 
     X_new = new_batch_df[FEATURE_COLUMNS]
     y_new = new_batch_df['hazard_label'].values
 
-    # Build DMatrix for the new batch
-    dtrain_new = xgb.DMatrix(X_new, label=y_new, feature_names=FEATURE_COLUMNS)
+    # Build CatBoost Pool for the new batch
+    train_pool = Pool(X_new, label=y_new, feature_names=FEATURE_COLUMNS)
 
-    # Incremental boosting parameters
-    params = {
-        'objective': 'binary:logistic',
-        'eval_metric': 'aucpr',
-        'learning_rate': 0.035,
-        'max_depth': 5,
-        'subsample': 0.85,
-        'colsample_bytree': 0.85
-    }
-
-    # WARM START: Continued training with xgb_model parameter!
-    print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] MLOPS: Fitting {INCREMENTAL_TREES} incremental corrective trees (Base trees: {initial_rounds})...")
-    updated_booster = xgb.train(
-        params,
-        dtrain_new,
-        num_boost_round=INCREMENTAL_TREES,
-        xgb_model=existing_booster # <-- Incremental warm start continuation
+    # Incremental CatBoost model — trains NEW trees on top of existing ones
+    incremental_model = CatBoostClassifier(
+        iterations=INCREMENTAL_TREES,
+        learning_rate=0.035,
+        depth=5,
+        l2_leaf_reg=3,
+        verbose=0,
+        loss_function='Logloss',
+        eval_metric='AUC'
     )
 
-    final_rounds = updated_booster.num_boosted_rounds()
+    # WARM START: init_model loads all existing trees, then fits new ones on top!
+    print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] MLOPS: Fitting {INCREMENTAL_TREES} incremental corrective trees (Base trees: {initial_trees})...")
+    incremental_model.fit(train_pool, init_model=champion_model_path)
 
-    # Synchronize updated booster back into CalibratedClassifierCV
-    base_xgb._Booster = updated_booster
-    if hasattr(calibrated_model, 'calibrated_classifiers_'):
-        for cc in calibrated_model.calibrated_classifiers_:
-            if hasattr(cc, 'estimator') and hasattr(cc.estimator, '_Booster'):
-                cc.estimator._Booster = updated_booster
+    final_trees = incremental_model.tree_count_
 
-    # Persist updated weights
-    joblib.dump(calibrated_model, champion_model_path)
+    # Persist updated model in CatBoost native format (.cbm)
+    incremental_model.save_model(champion_model_path)
     elapsed = round(time.time() - start_time, 2)
-    print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] MLOPS: Incremental warm-start complete! Trees: {initial_rounds} -> {final_rounds} in {elapsed}s.")
+    print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] MLOPS: CatBoost incremental warm-start complete! Trees: {initial_trees} -> {final_trees} in {elapsed}s.")
 
     return True, {
-        "initial_trees": initial_rounds,
-        "final_trees": final_rounds,
+        "initial_trees": initial_trees,
+        "final_trees": final_trees,
         "trees_added": INCREMENTAL_TREES,
         "warm_start_duration_sec": elapsed
     }
@@ -179,7 +169,7 @@ def continuous_training_pipeline():
     Main Autonomous Retraining Orchestrator
     """
     print("================================================================================")
-    print("  BHURAKSHAK AUTONOMOUS 24-HOUR INCREMENTAL MLOPS RETRAINING ENGINE v3.8        ")
+    print("  BHURAKSHAK AUTONOMOUS 24-HOUR CATBOOST INCREMENTAL MLOPS ENGINE v4.0           ")
     print("================================================================================")
     
     if not os.path.exists(DATA_PATH):
@@ -206,7 +196,7 @@ def continuous_training_pipeline():
     
     print(f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] MLOPS STORE: Ingested: +{len(new_daily_batch)} rows. Pruned FIFO: -{pruned_count} rows. Active Store: {len(bounded_df)} rows.")
 
-    # 4. Execute Incremental Warm-Start (xgb_model)
+    # 4. Execute CatBoost Incremental Warm-Start (init_model)
     success, warm_meta = execute_incremental_warm_start(new_daily_batch, champion_model_path=MODEL_PATH)
 
     # 5. Update Metrics Manifest
@@ -215,8 +205,9 @@ def continuous_training_pipeline():
             with open(METRICS_PATH, 'r') as f:
                 metrics_data = json.load(f)
             
+            metrics_data["model_type"] = "CatBoostStackingEnsemble"
             metrics_data["last_incremental_update"] = datetime.datetime.now().isoformat()
-            metrics_data["total_trees"] = warm_meta.get("final_trees", 262)
+            metrics_data["total_trees"] = warm_meta.get("final_trees", 300)
             metrics_data["psi_drift_score"] = avg_psi
             metrics_data["active_training_rows"] = len(bounded_df)
             metrics_data["warm_start_duration_sec"] = warm_meta.get("warm_start_duration_sec", 1.8)
@@ -228,7 +219,7 @@ def continuous_training_pipeline():
             print(f"Warning: Could not update metrics manifest: {e}")
 
     print("================================================================================")
-    print(f"  CYCLE COMPLETED: Warm-start active. Bounded store size: {len(bounded_df)} rows. ")
+    print(f"  CYCLE COMPLETED: CatBoost warm-start active. Store: {len(bounded_df)} rows.    ")
     print("================================================================================")
     return True
 

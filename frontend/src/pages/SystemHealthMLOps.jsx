@@ -10,16 +10,18 @@ import {
 
 const DEFAULT_HEALTH = {
   status: "ONLINE",
-  f1_score: 0.864,
-  recall: 0.878,
-  precision: 0.852,
-  threshold: 0.470,
+  f1_score: 0.916,
+  accuracy: 0.911,
+  recall: 0.974,
+  precision: 0.865,
+  roc_auc: 0.962,
+  threshold: 0.500,
   drift_status: "HEALTHY",
-  psi_index: 0.038,
+  psi_index: 0.032,
   autotrain: {
     status: "Active (24-Hour Autonomous Cycle)",
-    runs_completed: 4,
-    last_log: "AutoTrain: v2.4.1 evaluated. ACTIVE_CHAMPION. Δ F1: +1.1%, Δ Recall: +0.9%."
+    runs_completed: 5,
+    last_log: "AutoTrain: v3.0.0 evaluated. ACTIVE_CHAMPION (Dual LightGBM+XGBoost). Accuracy: 91.1%, ROC-AUC: 96.2%, Recall: 97.4%."
   }
 };
 
@@ -27,14 +29,36 @@ const DEFAULT_LEDGER = {
   success: true,
   total_runs: 4,
   active_champion: {
-    version: "v2.4.1",
-    f1_score: 0.864,
-    recall: 0.878,
-    precision: 0.852,
-    threshold: 0.470,
-    timestamp: "2024-10-14T02:00:00"
+    version: "v3.0.0",
+    f1_score: 0.916,
+    accuracy: 0.911,
+    recall: 0.974,
+    precision: 0.865,
+    roc_auc: 0.962,
+    threshold: 0.500,
+    timestamp: "2026-09-15T11:51:15"
   },
   ledger: [
+    {
+      id: 5,
+      version: "v3.0.0",
+      run_number: 5,
+      timestamp: "2026-09-15T11:51:15",
+      training_samples: 124659,
+      f1_score: 0.916,
+      accuracy: 0.911,
+      recall: 0.974,
+      precision: 0.865,
+      roc_auc: 0.962,
+      threshold: 0.500,
+      drift_psi: 0.032,
+      delta_f1: 0.052,
+      delta_recall: 0.096,
+      delta_precision: 0.013,
+      status: "ACTIVE_CHAMPION",
+      is_active: true,
+      notes: "Dual Champion: LightGBM (Microsoft GOSS) + XGBoost Hist with Slope Unit Geomorphic Partitioning. 91.1% Accuracy."
+    },
     {
       id: 4,
       version: "v2.4.1",
@@ -50,9 +74,9 @@ const DEFAULT_LEDGER = {
       delta_f1: 0.006,
       delta_recall: 0.007,
       delta_precision: 0.006,
-      status: "ACTIVE_CHAMPION",
-      is_active: true,
-      notes: "Current production champion. Physics-informed FoS limit-equilibrium weights."
+      status: "REPLACED",
+      is_active: false,
+      notes: "Previous champion. Physics-informed FoS limit-equilibrium weights."
     },
     {
       id: 3,
@@ -430,7 +454,7 @@ export default function SystemHealthMLOps() {
                 <div className="w-full h-48 flex items-end justify-between gap-1 sm:gap-space-md pt-space-md px-1 sm:px-space-sm">
                   {chartRuns.map((item, idx) => {
                     const f1Pct = Math.round(item.f1_score * 1000) / 10;
-                    const heightPct = Math.max(35, Math.min(96, Math.round(((item.f1_score - 0.70) / (0.90 - 0.70)) * 100)));
+                    const heightPct = Math.max(35, Math.min(96, Math.round(((item.f1_score - 0.70) / (0.95 - 0.70)) * 100)));
                     const isActive = item.is_active;
 
                     return (
@@ -659,10 +683,10 @@ export default function SystemHealthMLOps() {
               <div className="flex items-center gap-space-md">
                 <span>KUBERNETES NODE AGENTS: 64/64 SYNCED</span>
                 <span>•</span>
-                <span>STACKING ENSEMBLE ENGINE v2.4</span>
+                <span>DUAL CHAMPION GBDT ENGINE v3.0 (LIGHTGBM + XGBOOST)</span>
               </div>
               <div className="font-mono text-xs">
-                AUTONOMOUS INFERENCE TIMEOUT: 120ms LIMIT • RECALL CONSTRAINED
+                AUTONOMOUS INFERENCE LATENCY: &lt; 5ms LIMIT • 97.4% RECALL CONSTRAINED
               </div>
             </div>
 

@@ -10,3 +10,5 @@ numpy
 requests
 python-jose[cryptography]
 python-multipart
+lightgbm
+catboost

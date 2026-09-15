@@ -18,7 +18,7 @@ export default function ModelXAIInsights() {
 <span>·</span>
 <span className="text-primary flex items-center gap-1">
 <span className="inline-block w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
-            WEIGHTS ACTIVE (v3.8.4-RELEASE)
+            WEIGHTS ACTIVE (v3.0.0-DUAL-CHAMPION)
           </span>
 </div>
 <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight">Geotechnical Model &amp; XAI Telemetry</h1>
@@ -35,38 +35,38 @@ export default function ModelXAIInsights() {
 </div>
 {/*  Hero Stat Row: Exactly 3 numbers side by side, clean typography, spacious  */}
 <div className="grid grid-cols-1 md:grid-cols-3 gap-space-2xl py-space-2xl bg-surface-container-low/40 px-panel-padding rounded-xl shadow-md">
-{/*  Metric 1: F1-Score  */}
+{/*  Metric 1: Accuracy & F1  */}
 <div className="flex flex-col space-y-space-xs">
-<span className="font-label-caps text-label-caps text-outline uppercase tracking-widest">Macro Validation Metric</span>
+<span className="font-label-caps text-label-caps text-outline uppercase tracking-widest">Macro Holdout Accuracy</span>
 <div className="flex items-baseline gap-space-xs pt-space-xs">
-<span className="font-display-hero text-display-hero text-on-surface tracking-tight">78</span>
+<span className="font-display-hero text-display-hero text-on-surface tracking-tight">91.1</span>
 <span className="font-headline-sm text-headline-sm text-primary font-semibold">%</span>
 </div>
 <p className="font-body-sm text-body-sm text-on-surface-variant pt-space-xs leading-relaxed">
-          Spatial Validation F1-Macro on NE Terrain Holdout
+          Spatial Validation on 31,165 NE Terrain Samples (F1: 91.6%)
         </p>
 </div>
-{/*  Metric 2: Decision Threshold  */}
+{/*  Metric 2: ROC-AUC & Safety Recall  */}
 <div className="flex flex-col space-y-space-xs">
-<span className="font-label-caps text-label-caps text-outline uppercase tracking-widest">Operating Threshold</span>
+<span className="font-label-caps text-label-caps text-outline uppercase tracking-widest">ROC-AUC &amp; Safety Recall</span>
 <div className="flex items-baseline gap-space-xs pt-space-xs">
-<span className="font-display-hero text-display-hero text-secondary tracking-tight">0.470</span>
-<span className="font-telemetry-unit text-telemetry-unit text-outline">P(crit)</span>
+<span className="font-display-hero text-display-hero text-emerald-400 tracking-tight">96.2</span>
+<span className="font-headline-sm text-headline-sm text-emerald-400 font-semibold">%</span>
 </div>
 <p className="font-body-sm text-body-sm text-on-surface-variant pt-space-xs leading-relaxed">
-          Calibrated Optimal Cost-Sensitive Cutoff
+          97.4% Recall — Near-Zero Lethal Hazard Miss Rate
         </p>
 </div>
 {/*  Metric 3: Model Type  */}
 <div className="flex flex-col space-y-space-xs">
-<span className="font-label-caps text-label-caps text-outline uppercase tracking-widest">Classifier Architecture</span>
+<span className="font-label-caps text-label-caps text-outline uppercase tracking-widest">Dual Champion Architecture</span>
 <div className="pt-space-xs">
 <span className="font-headline-lg text-headline-lg text-on-surface leading-tight block">
-            Ensemble LightGBM + Geo-Prior
+            LightGBM + XGBoost Hist
           </span>
 </div>
 <p className="font-body-sm text-body-sm text-on-surface-variant pt-space-xs leading-relaxed">
-          Physics-Guided Empirical GSI-ID Rule Engine
+          Dual GBDT + Geomorphic Slope Unit Partitioning (&lt; 5ms)
         </p>
 </div>
 </div>

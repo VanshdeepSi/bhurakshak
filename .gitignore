@@ -37,3 +37,6 @@ Thumbs.db
 # SQLite local databases
 bhurakshak.db
 *.sqlite3
+
+catboost_info/
+backend/catboost_info/
